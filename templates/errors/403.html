@@ -1,0 +1,883 @@
+
+{% extends "base.html" %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/style.css') }}"
+>
+{% block title %}الوصول مرفوض | Smart POS ERP{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* =========================================================
+       403 - FORBIDDEN
+       SMART POS / ERP SYSTEM
+       ========================================================= */
+
+    .forbidden-page {
+        min-height: calc(100vh - 120px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .forbidden-container {
+        width: 100%;
+        max-width: 1100px;
+    }
+
+    .forbidden-card {
+        position: relative;
+        overflow: hidden;
+        background: var(--card-bg, #ffffff);
+        border: 1px solid var(--border-color, #e5e7eb);
+        border-radius: 30px;
+        padding: 55px 45px;
+        box-shadow:
+            0 25px 70px rgba(15, 23, 42, 0.10);
+    }
+
+    /* Decorative background */
+
+    .forbidden-card::before {
+        content: "";
+        position: absolute;
+        width: 380px;
+        height: 380px;
+        border-radius: 50%;
+        background: rgba(239, 68, 68, 0.07);
+        top: -220px;
+        right: -120px;
+        pointer-events: none;
+    }
+
+    .forbidden-card::after {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: rgba(245, 158, 11, 0.06);
+        bottom: -180px;
+        left: -110px;
+        pointer-events: none;
+    }
+
+    .forbidden-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    /* =========================================================
+       SECURITY BADGE
+       ========================================================= */
+
+    .security-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 15px;
+        margin-bottom: 25px;
+        border-radius: 999px;
+        background: rgba(239, 68, 68, 0.09);
+        border: 1px solid rgba(239, 68, 68, 0.15);
+        color: #dc2626;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .security-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ef4444;
+        box-shadow:
+            0 0 0 4px rgba(239, 68, 68, 0.12);
+    }
+
+    /* =========================================================
+       ICON
+       ========================================================= */
+
+    .forbidden-icon-wrapper {
+        width: 135px;
+        height: 135px;
+        margin: 0 auto 28px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 38px;
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(239, 68, 68, 0.13),
+                rgba(245, 158, 11, 0.10)
+            );
+
+        border: 1px solid rgba(239, 68, 68, 0.14);
+
+        box-shadow:
+            0 20px 50px rgba(239, 68, 68, 0.10);
+    }
+
+    .forbidden-icon {
+        width: 76px;
+        height: 76px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background:
+            linear-gradient(
+                135deg,
+                #ef4444,
+                #dc2626
+            );
+
+        color: #ffffff;
+
+        font-size: 34px;
+
+        box-shadow:
+            0 15px 30px rgba(239, 68, 68, 0.25);
+    }
+
+    /* =========================================================
+       ERROR CODE
+       ========================================================= */
+
+    .forbidden-code {
+        margin: 0;
+
+        font-size: clamp(80px, 12vw, 145px);
+
+        line-height: 0.9;
+
+        font-weight: 900;
+
+        letter-spacing: -7px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #dc2626,
+                #f59e0b
+            );
+
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* =========================================================
+       TEXT
+       ========================================================= */
+
+    .forbidden-title {
+        margin: 20px 0 14px;
+
+        font-size: clamp(27px, 4vw, 42px);
+
+        font-weight: 850;
+
+        color:
+            var(--text-primary, #111827);
+    }
+
+    .forbidden-description {
+        max-width: 700px;
+
+        margin: 0 auto;
+
+        color:
+            var(--text-secondary, #6b7280);
+
+        font-size: 16px;
+
+        line-height: 1.9;
+    }
+
+    /* =========================================================
+       CURRENT USER INFORMATION
+       ========================================================= */
+
+    .access-information {
+        max-width: 720px;
+
+        margin: 30px auto 0;
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 14px;
+
+        text-align: right;
+    }
+
+    .access-box {
+        padding: 17px 18px;
+
+        border-radius: 16px;
+
+        background:
+            var(--input-bg, #f8fafc);
+
+        border:
+            1px solid
+            var(--border-color, #e5e7eb);
+    }
+
+    .access-label {
+        display: block;
+
+        margin-bottom: 6px;
+
+        color:
+            var(--text-secondary, #9ca3af);
+
+        font-size: 11px;
+
+        font-weight: 700;
+    }
+
+    .access-value {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        color:
+            var(--text-primary, #374151);
+
+        font-size: 14px;
+
+        font-weight: 750;
+    }
+
+    .access-value i {
+        color: #ef4444;
+    }
+
+    /* =========================================================
+       REQUESTED URL
+       ========================================================= */
+
+    .requested-resource {
+        max-width: 720px;
+
+        margin: 14px auto 0;
+
+        padding: 14px 18px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        direction: ltr;
+
+        text-align: left;
+
+        border-radius: 14px;
+
+        background:
+            var(--input-bg, #f8fafc);
+
+        border:
+            1px solid
+            var(--border-color, #e5e7eb);
+    }
+
+    .resource-icon {
+        width: 36px;
+        height: 36px;
+
+        flex: 0 0 auto;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 10px;
+
+        background:
+            rgba(239, 68, 68, 0.10);
+
+        color: #ef4444;
+    }
+
+    .resource-path {
+        min-width: 0;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        text-overflow: ellipsis;
+
+        font-family: monospace;
+
+        font-size: 13px;
+
+        color:
+            var(--text-secondary, #6b7280);
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .forbidden-actions {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+        margin-top: 34px;
+    }
+
+    .forbidden-btn {
+        min-height: 49px;
+
+        padding: 0 23px;
+
+        border-radius: 13px;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 9px;
+
+        border: 1px solid transparent;
+
+        font-size: 14px;
+
+        font-weight: 750;
+
+        text-decoration: none;
+
+        cursor: pointer;
+
+        transition:
+            transform .2s ease,
+            box-shadow .2s ease,
+            background .2s ease;
+    }
+
+    .forbidden-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .forbidden-btn-primary {
+        color: #ffffff;
+
+        background:
+            linear-gradient(
+                135deg,
+                #2563eb,
+                #4f46e5
+            );
+
+        box-shadow:
+            0 10px 25px rgba(37, 99, 235, 0.22);
+    }
+
+    .forbidden-btn-primary:hover {
+        color: #ffffff;
+
+        box-shadow:
+            0 15px 32px rgba(37, 99, 235, 0.30);
+    }
+
+    .forbidden-btn-secondary {
+        color:
+            var(--text-primary, #374151);
+
+        background:
+            var(--card-bg, #ffffff);
+
+        border-color:
+            var(--border-color, #dbe1ea);
+    }
+
+    .forbidden-btn-secondary:hover {
+        background:
+            var(--input-bg, #f8fafc);
+    }
+
+    /* =========================================================
+       SECURITY NOTICE
+       ========================================================= */
+
+    .security-notice {
+        max-width: 720px;
+
+        margin: 28px auto 0;
+
+        padding: 17px 19px;
+
+        display: flex;
+
+        align-items: flex-start;
+
+        gap: 13px;
+
+        text-align: right;
+
+        border-radius: 15px;
+
+        background:
+            rgba(245, 158, 11, 0.08);
+
+        border:
+            1px solid
+            rgba(245, 158, 11, 0.15);
+    }
+
+    .security-notice-icon {
+        width: 35px;
+        height: 35px;
+
+        flex: 0 0 auto;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 10px;
+
+        background:
+            rgba(245, 158, 11, 0.12);
+
+        color: #d97706;
+    }
+
+    .security-notice-text {
+        color:
+            var(--text-secondary, #6b7280);
+
+        font-size: 13px;
+
+        line-height: 1.8;
+    }
+
+    .security-notice-text strong {
+        color:
+            var(--text-primary, #4b5563);
+    }
+
+    /* =========================================================
+       DARK MODE
+       ========================================================= */
+
+    [data-theme="dark"] .forbidden-card {
+        background: #111827;
+        border-color: #263244;
+
+        box-shadow:
+            0 25px 70px rgba(0, 0, 0, .30);
+    }
+
+    [data-theme="dark"] .forbidden-title {
+        color: #f9fafb;
+    }
+
+    [data-theme="dark"] .forbidden-description {
+        color: #9ca3af;
+    }
+
+    [data-theme="dark"] .access-box,
+    [data-theme="dark"] .requested-resource {
+        background: #0f172a;
+        border-color: #263244;
+    }
+
+    [data-theme="dark"] .access-value {
+        color: #e5e7eb;
+    }
+
+    [data-theme="dark"] .forbidden-btn-secondary {
+        background: #111827;
+        border-color: #334155;
+        color: #e5e7eb;
+    }
+
+    [data-theme="dark"] .forbidden-btn-secondary:hover {
+        background: #1e293b;
+    }
+
+    [data-theme="dark"] .security-notice-text {
+        color: #9ca3af;
+    }
+
+    [data-theme="dark"] .security-notice-text strong {
+        color: #e5e7eb;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @media (max-width: 768px) {
+
+        .forbidden-page {
+            padding: 25px 15px;
+        }
+
+        .forbidden-card {
+            padding: 40px 20px;
+            border-radius: 23px;
+        }
+
+        .forbidden-icon-wrapper {
+            width: 110px;
+            height: 110px;
+            border-radius: 30px;
+        }
+
+        .forbidden-icon {
+            width: 65px;
+            height: 65px;
+            font-size: 29px;
+        }
+
+        .forbidden-code {
+            font-size: 95px;
+            letter-spacing: -5px;
+        }
+
+        .forbidden-title {
+            font-size: 27px;
+        }
+
+        .forbidden-description {
+            font-size: 14px;
+        }
+
+        .access-information {
+            grid-template-columns: 1fr;
+        }
+
+        .forbidden-actions {
+            flex-direction: column;
+        }
+
+        .forbidden-btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 420px) {
+
+        .forbidden-card {
+            padding: 34px 15px;
+        }
+
+        .forbidden-code {
+            font-size: 78px;
+        }
+
+        .forbidden-title {
+            font-size: 23px;
+        }
+    }
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+        .forbidden-btn {
+            transition: none;
+        }
+
+        .forbidden-btn:hover {
+            transform: none;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="forbidden-page">
+
+    <div class="forbidden-container">
+
+        <div class="forbidden-card">
+
+            <div class="forbidden-content">
+
+                <!-- Security Status -->
+
+                <div class="security-badge">
+
+                    <span class="security-dot"></span>
+
+                    <span>
+                        نظام الحماية والصلاحيات
+                    </span>
+
+                </div>
+
+
+                <!-- Main Icon -->
+
+                <div class="forbidden-icon-wrapper">
+
+                    <div
+                        class="forbidden-icon"
+                        aria-hidden="true"
+                    >
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+
+                </div>
+
+
+                <!-- Error Code -->
+
+                <div
+                    class="forbidden-code"
+                    role="img"
+                    aria-label="403"
+                >
+                    403
+                </div>
+
+
+                <!-- Title -->
+
+                <h1 class="forbidden-title">
+
+                    الوصول إلى هذه الصفحة مرفوض
+
+                </h1>
+
+
+                <!-- Description -->
+
+                <p class="forbidden-description">
+
+                    حسابك مسجل في النظام، ولكن مستوى الصلاحيات
+                    الخاص بحسابك لا يسمح لك بالوصول إلى هذا المورد.
+
+                    <br>
+
+                    إذا كنت تعتقد أن لديك الصلاحية المطلوبة،
+                    يرجى التواصل مع مدير النظام لمراجعة صلاحيات حسابك.
+
+                </p>
+
+
+                <!-- User / Permission Information -->
+
+                {% if current_user %}
+
+                <div class="access-information">
+
+                    <div class="access-box">
+
+                        <span class="access-label">
+                            المستخدم الحالي
+                        </span>
+
+                        <div class="access-value">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <span>
+                                {{ current_user.full_name }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="access-box">
+
+                        <span class="access-label">
+                            مستوى الصلاحية
+                        </span>
+
+                        <div class="access-value">
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            <span>
+                                {{ current_user.role|capitalize }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- Requested Resource -->
+
+                <div class="requested-resource">
+
+                    <div class="resource-icon">
+
+                        <i class="fa-solid fa-link"></i>
+
+                    </div>
+
+                    <div
+                        class="resource-path"
+                        title="{{ request.path }}"
+                    >
+                        {{ request.path }}
+                    </div>
+
+                </div>
+
+
+                <!-- Actions -->
+
+                <div class="forbidden-actions">
+
+                    <a
+                        href="{{ url_for('dashboard') }}"
+                        class="forbidden-btn forbidden-btn-primary"
+                    >
+
+                        <i class="fa-solid fa-gauge-high"></i>
+
+                        <span>
+                            العودة للوحة التحكم
+                        </span>
+
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="forbidden-btn forbidden-btn-secondary"
+                        id="backButton"
+                    >
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                        <span>
+                            الرجوع للصفحة السابقة
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- Security Notice -->
+
+                <div class="security-notice">
+
+                    <div class="security-notice-icon">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                    </div>
+
+                    <div class="security-notice-text">
+
+                        <strong>
+                            تنبيه أمني:
+                        </strong>
+
+                        يتم تطبيق نظام الصلاحيات في جميع أجزاء
+                        Smart POS ERP لحماية المنتجات والمخزون
+                        والمبيعات والتقارير والمستخدمين وسجل العمليات.
+                        عدم ظهور الصفحة لا يعني وجود مشكلة في النظام،
+                        بل قد يكون نتيجة لعدم امتلاك الحساب للصلاحية
+                        المطلوبة.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const backButton =
+                document.getElementById("backButton");
+
+            if (!backButton) {
+                return;
+            }
+
+            backButton.addEventListener(
+                "click",
+                function () {
+
+                    /*
+                     * إذا كان هناك تاريخ سابق،
+                     * نعود إليه فعلياً.
+                     */
+
+                    if (
+                        window.history.length > 1 &&
+                        document.referrer
+                    ) {
+
+                        window.history.back();
+
+                        return;
+                    }
+
+                    /*
+                     * إذا لم يوجد تاريخ سابق،
+                     * نعيد المستخدم للـDashboard.
+                     */
+
+                    window.location.href =
+                        "{{ url_for('dashboard') }}";
+
+                }
+            );
+
+        }
+    );
+</script>
+{% endblock %}

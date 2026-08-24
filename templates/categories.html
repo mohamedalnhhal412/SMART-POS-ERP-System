@@ -1,0 +1,5325 @@
+{% extends "base.html" %}
+
+{% block title %}
+إدارة التصنيفات | SMART POS ERP
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   SMART POS / ERP
+   CATEGORIES PAGE
+   ========================================================= */
+
+:root {
+    --cat-primary: #4f46e5;
+    --cat-primary-dark: #4338ca;
+    --cat-primary-light: #eef2ff;
+
+    --cat-success: #10b981;
+    --cat-success-light: #ecfdf5;
+
+    --cat-warning: #f59e0b;
+    --cat-warning-light: #fffbeb;
+
+    --cat-danger: #ef4444;
+    --cat-danger-light: #fef2f2;
+
+    --cat-info: #0ea5e9;
+    --cat-info-light: #f0f9ff;
+
+    --cat-purple: #8b5cf6;
+
+    --cat-text: #111827;
+    --cat-text-soft: #64748b;
+    --cat-border: #e5e7eb;
+    --cat-bg: #f8fafc;
+    --cat-white: #ffffff;
+
+    --cat-radius: 22px;
+
+    --cat-shadow:
+        0 12px 40px rgba(15, 23, 42, .06);
+}
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.categories-page {
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.categories-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 165px;
+    padding: 30px 38px;
+    margin-bottom: 28px;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #f8faff 55%,
+            #eef2ff 100%
+        );
+
+    border: 1px solid rgba(99, 102, 241, .10);
+    border-radius: 28px;
+
+    box-shadow:
+        0 15px 45px rgba(30, 41, 59, .07);
+}
+
+.categories-hero::before {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: rgba(99, 102, 241, .08);
+    top: -150px;
+    left: -60px;
+}
+
+.categories-hero::after {
+    content: "";
+    position: absolute;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, .06);
+    right: -70px;
+    bottom: -150px;
+}
+
+.categories-hero-content {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.categories-hero-icon {
+    width: 80px;
+    height: 80px;
+    flex: 0 0 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 24px;
+
+    color: #ffffff;
+
+    font-size: 31px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #7c3aed
+        );
+
+    box-shadow:
+        0 15px 30px rgba(99, 102, 241, .25);
+}
+
+.categories-hero-text h1 {
+    margin: 0 0 7px;
+
+    color: var(--cat-text);
+
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+.categories-hero-text p {
+    margin: 0;
+
+    color: var(--cat-text-soft);
+
+    font-size: 15px;
+}
+
+.categories-hero-actions {
+    position: relative;
+    z-index: 3;
+}
+
+.category-add-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-height: 54px;
+    padding: 0 23px;
+
+    border: 0;
+    border-radius: 16px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+        );
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 25px rgba(79, 70, 229, .22);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.category-add-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 32px rgba(79, 70, 229, .30);
+}
+
+.category-add-button i {
+    font-size: 16px;
+}
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.categories-stats {
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.category-stat-card {
+    position: relative;
+
+    min-height: 125px;
+    padding: 22px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(226, 232, 240, .85);
+    border-radius: 22px;
+
+    box-shadow: var(--cat-shadow);
+}
+
+.category-stat-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    border-radius: 50%;
+
+    right: -55px;
+    bottom: -70px;
+
+    background: rgba(99, 102, 241, .04);
+}
+
+.category-stat-top {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 15px;
+}
+
+.category-stat-label {
+    color: #94a3b8;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.category-stat-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    font-size: 20px;
+}
+
+.category-stat-total .category-stat-icon {
+    color: var(--cat-primary);
+    background: var(--cat-primary-light);
+}
+
+.category-stat-active .category-stat-icon {
+    color: var(--cat-success);
+    background: var(--cat-success-light);
+}
+
+.category-stat-used .category-stat-icon {
+    color: var(--cat-info);
+    background: var(--cat-info-light);
+}
+
+.category-stat-empty .category-stat-icon {
+    color: var(--cat-warning);
+    background: var(--cat-warning-light);
+}
+
+.category-stat-value {
+    position: relative;
+    z-index: 2;
+
+    color: var(--cat-text);
+
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.category-stat-description {
+    position: relative;
+    z-index: 2;
+
+    display: block;
+
+    margin-top: 8px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+/* =========================================================
+   MAIN PANEL
+   ========================================================= */
+
+.categories-panel {
+    position: relative;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(226, 232, 240, .9);
+    border-radius: 25px;
+
+    box-shadow: var(--cat-shadow);
+}
+
+/* =========================================================
+   PANEL HEADER
+   ========================================================= */
+
+.categories-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 22px 26px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f8faff,
+            #f1f5ff
+        );
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.categories-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.categories-panel-title-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    color: var(--cat-primary);
+    background: var(--cat-primary-light);
+
+    font-size: 19px;
+}
+
+.categories-panel-title h2 {
+    margin: 0;
+
+    color: var(--cat-text);
+
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.categories-panel-title p {
+    margin: 5px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+.categories-selection-area {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+.categories-selected-count {
+    color: var(--cat-primary);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.categories-selected-count span {
+    font-weight: 900;
+}
+
+.categories-delete-selected {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    height: 43px;
+    padding: 0 16px;
+
+    border: 0;
+    border-radius: 12px;
+
+    color: #ffffff;
+    background: var(--cat-danger);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.categories-delete-selected:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.categories-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 22px 26px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.categories-toolbar-left {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    flex: 1;
+}
+
+.categories-search {
+    position: relative;
+
+    width: min(420px, 100%);
+}
+
+.categories-search i.search-icon {
+    position: absolute;
+
+    top: 50%;
+    right: 16px;
+
+    transform: translateY(-50%);
+
+    color: #94a3b8;
+
+    pointer-events: none;
+}
+
+.categories-search input {
+    width: 100%;
+    height: 48px;
+
+    padding:
+        0 45px
+        0 40px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    outline: none;
+
+    color: var(--cat-text);
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    box-sizing: border-box;
+
+    transition: .2s;
+}
+
+.categories-search input:focus {
+    border-color: var(--cat-primary);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(79, 70, 229, .08);
+}
+
+.categories-search-clear {
+    position: absolute;
+
+    top: 50%;
+    left: 12px;
+
+    width: 28px;
+    height: 28px;
+
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 8px;
+
+    color: #94a3b8;
+    background: transparent;
+
+    cursor: pointer;
+}
+
+.categories-filter select {
+    height: 48px;
+    min-width: 180px;
+
+    padding: 0 15px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    outline: none;
+
+    color: #475569;
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.categories-filter select:focus {
+    border-color: var(--cat-primary);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(79, 70, 229, .08);
+}
+
+.categories-refresh {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    height: 48px;
+
+    padding: 0 17px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    color: #475569;
+    background: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.categories-refresh:hover {
+    color: var(--cat-primary);
+
+    border-color:
+        rgba(79, 70, 229, .25);
+
+    background:
+        var(--cat-primary-light);
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.categories-loading-overlay {
+    position: absolute;
+
+    z-index: 50;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,.72);
+
+    backdrop-filter: blur(4px);
+}
+
+.categories-loading-overlay[hidden] {
+    display: none !important;
+}
+
+.categories-loading-box {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 18px 24px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+
+    color: var(--cat-primary);
+    background: #ffffff;
+
+    box-shadow:
+        0 15px 35px
+        rgba(15, 23, 42, .10);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.categories-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.categories-table {
+    width: 100%;
+    min-width: 1050px;
+
+    border-collapse: collapse;
+}
+
+.categories-table thead {
+    background: #f8fafc;
+}
+
+.categories-table th {
+    padding: 16px 18px;
+
+    border-bottom:
+        1px solid #e2e8f0;
+
+    color: #64748b;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.categories-table th:first-child,
+.categories-table td:first-child {
+    width: 55px;
+    text-align: center;
+}
+
+.categories-table th:last-child,
+.categories-table td:last-child {
+    width: 150px;
+}
+
+.categories-table td {
+    padding: 17px 18px;
+
+    border-bottom:
+        1px solid #f1f5f9;
+
+    color: #475569;
+
+    vertical-align: middle;
+
+    font-size: 14px;
+}
+
+.categories-table tbody tr {
+    transition: background .18s ease;
+}
+
+.categories-table tbody tr:hover {
+    background: #fafbff;
+}
+
+/* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+.category-checkbox,
+.categories-select-all {
+    width: 17px;
+    height: 17px;
+
+    accent-color: var(--cat-primary);
+
+    cursor: pointer;
+}
+
+/* =========================================================
+   CATEGORY INFO
+   ========================================================= */
+
+.category-table-info {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 230px;
+}
+
+.category-icon {
+    width: 47px;
+    height: 47px;
+
+    flex: 0 0 47px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    color: var(--cat-primary);
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef2ff,
+            #f5f3ff
+        );
+
+    font-size: 19px;
+}
+
+.category-table-info strong {
+    display: block;
+
+    color: #111827;
+
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.category-table-info small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+.category-description {
+    display: block;
+
+    max-width: 300px;
+
+    color: #64748b;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.category-products-count {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 32px;
+
+    padding: 0 9px;
+
+    border-radius: 10px;
+
+    color: var(--cat-info);
+    background: var(--cat-info-light);
+
+    font-weight: 900;
+}
+
+.category-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 80px;
+    height: 32px;
+
+    padding: 0 12px;
+
+    border-radius: 10px;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.category-status.active {
+    color: #047857;
+    background: #ecfdf5;
+}
+
+.category-status.inactive {
+    color: #b45309;
+    background: #fffbeb;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.category-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 7px;
+}
+
+.category-actions button {
+    width: 38px;
+    height: 38px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.category-actions button:hover {
+    transform: translateY(-2px);
+}
+
+.category-actions .btn-primary {
+    color: #ffffff;
+    background: #4f46e5;
+
+    box-shadow:
+        0 6px 14px
+        rgba(79,70,229,.16);
+}
+
+.category-actions .btn-warning {
+    color: #ffffff;
+    background: #f59e0b;
+
+    box-shadow:
+        0 6px 14px
+        rgba(245,158,11,.16);
+}
+
+.category-actions .btn-danger {
+    color: #ffffff;
+    background: #ef4444;
+
+    box-shadow:
+        0 6px 14px
+        rgba(239,68,68,.16);
+}
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.categories-empty-cell {
+    height: 300px;
+
+    text-align: center !important;
+}
+
+.categories-empty {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+}
+
+.categories-empty > i {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 5px;
+
+    border-radius: 20px;
+
+    color: #94a3b8;
+    background: #f8fafc;
+
+    font-size: 26px;
+}
+
+.categories-empty strong {
+    color: #334155;
+
+    font-size: 16px;
+}
+
+.categories-empty span {
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.categories-pagination-wrapper {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 80px;
+
+    padding: 10px 25px;
+
+    border-top:
+        1px solid #f1f5f9;
+}
+
+[data-categories-pagination] {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+}
+
+.pagination-btn {
+    min-width: 38px;
+    height: 38px;
+
+    padding: 0 10px;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    color: #475569;
+    background: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .18s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    color: var(--cat-primary);
+
+    border-color:
+        rgba(79,70,229,.25);
+
+    background:
+        var(--cat-primary-light);
+}
+
+.pagination-btn.active {
+    color: #ffffff;
+
+    border-color:
+        var(--cat-primary);
+
+    background:
+        var(--cat-primary);
+}
+
+.pagination-btn:disabled {
+    opacity: .45;
+
+    cursor: not-allowed;
+}
+
+.pagination-dots {
+    padding: 0 3px;
+
+    color: #94a3b8;
+
+    font-weight: 900;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.categories-footer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 17px 25px;
+
+    color: #94a3b8;
+
+    background: #fafbfc;
+
+    border-top:
+        1px solid #f1f5f9;
+
+    font-size: 12px;
+}
+
+.categories-footer span {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+.categories-footer i {
+    color: var(--cat-success);
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+[data-category-modal] {
+    position: fixed;
+
+    z-index: 9999;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(15, 23, 42, .55);
+
+    backdrop-filter: blur(7px);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity .2s ease,
+        visibility .2s ease;
+}
+
+[data-category-modal].is-open {
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+.category-modal-card {
+    width: min(560px, 100%);
+
+    max-height:
+        calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 30px 80px
+        rgba(15,23,42,.25);
+
+    transform:
+        translateY(15px)
+        scale(.98);
+
+    transition:
+        transform .22s ease;
+}
+
+[data-category-modal].is-open .category-modal-card {
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.category-modal-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 22px 25px;
+
+    border-bottom:
+        1px solid #eef2f7;
+}
+
+.category-modal-title-wrap {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.category-modal-title-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    color: var(--cat-primary);
+
+    background:
+        var(--cat-primary-light);
+}
+
+.category-modal-header h3 {
+    margin: 0;
+
+    color: var(--cat-text);
+
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.category-modal-close {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 11px;
+
+    color: #64748b;
+
+    background: #f8fafc;
+
+    cursor: pointer;
+
+    transition: .18s;
+}
+
+.category-modal-close:hover {
+    color: var(--cat-danger);
+
+    background:
+        var(--cat-danger-light);
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+[data-category-form] {
+    padding: 25px;
+}
+
+.category-form-group {
+    margin-bottom: 20px;
+}
+
+.category-form-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.category-form-label .required {
+    color: var(--cat-danger);
+}
+
+.category-form-control {
+    width: 100%;
+
+    min-height: 48px;
+
+    padding: 0 14px;
+
+    border:
+        1px solid #dbe3ed;
+
+    border-radius: 13px;
+
+    outline: none;
+
+    color: #1e293b;
+
+    background: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    box-sizing: border-box;
+
+    transition: .2s;
+}
+
+textarea.category-form-control {
+    min-height: 110px;
+
+    padding-top: 13px;
+
+    resize: vertical;
+}
+
+.category-form-control:focus {
+    border-color:
+        var(--cat-primary);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(79,70,229,.08);
+}
+
+.category-icon-input {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.category-icon-preview {
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    color: var(--cat-primary);
+
+    background:
+        var(--cat-primary-light);
+
+    font-size: 19px;
+}
+
+.category-checkbox-wrapper {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 13px 14px;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 13px;
+
+    background: #f8fafc;
+}
+
+.category-checkbox-wrapper input {
+    width: 18px;
+    height: 18px;
+
+    accent-color:
+        var(--cat-primary);
+
+    cursor: pointer;
+}
+
+.category-checkbox-wrapper label {
+    color: #475569;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.category-form-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.category-form-actions button {
+    flex: 1;
+
+    min-height: 49px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.category-modal-cancel {
+    color: #475569;
+
+    background: #f1f5f9;
+}
+
+.category-modal-cancel:hover {
+    background: #e2e8f0;
+}
+
+.category-modal-submit {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #6366f1
+        );
+
+    box-shadow:
+        0 8px 20px
+        rgba(79,70,229,.18);
+}
+
+.category-modal-submit:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 11px 25px
+        rgba(79,70,229,.25);
+}
+
+[data-category-form].is-loading {
+    opacity: .7;
+
+    pointer-events: none;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.categories-toast-container {
+    position: fixed;
+
+    z-index: 100000;
+
+    left: 25px;
+    bottom: 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    width: min(390px, calc(100vw - 30px));
+
+    pointer-events: none;
+}
+
+.categories-toast {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 15px 17px;
+
+    border-radius: 15px;
+
+    background: #ffffff;
+
+    border:
+        1px solid #e2e8f0;
+
+    box-shadow:
+        0 18px 45px
+        rgba(15,23,42,.16);
+
+    animation:
+        categoryToastIn .25s ease;
+
+    pointer-events: auto;
+}
+
+.categories-toast.success {
+    border-right: 4px solid var(--cat-success);
+}
+
+.categories-toast.error {
+    border-right: 4px solid var(--cat-danger);
+}
+
+.categories-toast.warning {
+    border-right: 4px solid var(--cat-warning);
+}
+
+.categories-toast.info {
+    border-right: 4px solid var(--cat-info);
+}
+
+.categories-toast-icon {
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+}
+
+.categories-toast-content {
+    flex: 1;
+}
+
+.categories-toast-content strong {
+    display: block;
+
+    color: #1e293b;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.categories-toast-content span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #64748b;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+@keyframes categoryToastIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.categories-error-state {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 300px;
+
+    padding: 30px;
+
+    text-align: center;
+}
+
+.categories-error-state > i {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    border-radius: 20px;
+
+    color: var(--cat-danger);
+
+    background:
+        var(--cat-danger-light);
+
+    font-size: 27px;
+}
+
+.categories-error-state strong {
+    color: #334155;
+
+    font-size: 16px;
+}
+
+.categories-error-state span {
+    max-width: 550px;
+
+    margin-top: 7px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.categories-error-state button {
+    margin-top: 17px;
+
+    min-height: 43px;
+
+    padding: 0 18px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    color: #ffffff;
+
+    background: var(--cat-primary);
+
+    font-family: inherit;
+
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .categories-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+
+    .categories-hero {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .categories-hero-actions {
+        width: 100%;
+    }
+
+    .category-add-button {
+        width: 100%;
+    }
+
+    .categories-toolbar {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .categories-toolbar-left {
+        flex-direction: column;
+    }
+
+    .categories-search {
+        width: 100%;
+    }
+
+    .categories-filter,
+    .categories-filter select {
+        width: 100%;
+    }
+
+    .categories-refresh {
+        width: 100%;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .categories-page {
+        padding: 14px;
+    }
+
+    .categories-hero {
+        padding: 25px 20px;
+
+        border-radius: 22px;
+    }
+
+    .categories-hero-content {
+        align-items: flex-start;
+    }
+
+    .categories-hero-icon {
+        width: 62px;
+        height: 62px;
+
+        flex-basis: 62px;
+
+        border-radius: 18px;
+
+        font-size: 24px;
+    }
+
+    .categories-hero-text h1 {
+        font-size: 24px;
+    }
+
+    .categories-stats {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .categories-panel-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        padding: 18px;
+    }
+
+    .categories-selection-area {
+        width: 100%;
+
+        justify-content: space-between;
+    }
+
+    .categories-toolbar {
+        padding: 17px;
+    }
+
+    .categories-footer {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .category-form-actions {
+        flex-direction: column;
+    }
+
+    .category-form-actions button {
+        width: 100%;
+    }
+
+    .categories-toast-container {
+        left: 15px;
+        bottom: 15px;
+    }
+}
+
+/* =========================================================
+   BODY MODAL STATE
+   ========================================================= */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div
+    class="categories-page"
+    data-categories
+
+    data-categories-endpoint="{{ categories_endpoint|default('/api/categories', true) }}"
+    data-create-endpoint="{{ categories_create_endpoint|default('/api/categories', true) }}"
+    data-update-endpoint="{{ categories_update_endpoint|default('/api/categories/{id}', true) }}"
+    data-delete-endpoint="{{ categories_delete_endpoint|default('/api/categories/{id}', true) }}"
+    data-toggle-status-endpoint="{{ categories_toggle_status_endpoint|default('/api/categories/{id}/status', true) }}"
+>
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="categories-hero">
+
+        <div class="categories-hero-content">
+
+            <div class="categories-hero-icon">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+
+            <div class="categories-hero-text">
+
+                <h1>
+                    إدارة التصنيفات
+                </h1>
+
+                <p>
+                    تنظيم وإدارة تصنيفات المنتجات في نظام
+                    Smart POS ERP
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="categories-hero-actions">
+
+            <button
+                type="button"
+                class="category-add-button"
+                data-category-add
+            >
+                <i class="fa-solid fa-plus"></i>
+                إضافة تصنيف
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="categories-stats">
+
+        <div class="category-stat-card category-stat-total">
+
+            <div class="category-stat-top">
+
+                <span class="category-stat-label">
+                    إجمالي التصنيفات
+                </span>
+
+                <div class="category-stat-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+
+            </div>
+
+            <div
+                class="category-stat-value"
+                data-categories-total
+            >
+                0
+            </div>
+
+            <span class="category-stat-description">
+                جميع التصنيفات الموجودة في النظام
+            </span>
+
+        </div>
+
+
+        <div class="category-stat-card category-stat-active">
+
+            <div class="category-stat-top">
+
+                <span class="category-stat-label">
+                    التصنيفات النشطة
+                </span>
+
+                <div class="category-stat-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+
+            </div>
+
+            <div
+                class="category-stat-value"
+                id="categoriesActiveCount"
+            >
+                0
+            </div>
+
+            <span class="category-stat-description">
+                متاحة للاستخدام
+            </span>
+
+        </div>
+
+
+        <div class="category-stat-card category-stat-used">
+
+            <div class="category-stat-top">
+
+                <span class="category-stat-label">
+                    تصنيفات مستخدمة
+                </span>
+
+                <div class="category-stat-icon">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+
+            </div>
+
+            <div
+                class="category-stat-value"
+                id="categoriesUsedCount"
+            >
+                0
+            </div>
+
+            <span class="category-stat-description">
+                تحتوي على منتجات
+            </span>
+
+        </div>
+
+
+        <div class="category-stat-card category-stat-empty">
+
+            <div class="category-stat-top">
+
+                <span class="category-stat-label">
+                    تصنيفات فارغة
+                </span>
+
+                <div class="category-stat-icon">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+
+            </div>
+
+            <div
+                class="category-stat-value"
+                id="categoriesEmptyCount"
+            >
+                0
+            </div>
+
+            <span class="category-stat-description">
+                لا تحتوي على منتجات
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MAIN PANEL
+    ====================================================== -->
+
+    <section class="categories-panel">
+
+        <div
+            class="categories-loading-overlay"
+            data-categories-loading
+            hidden
+        >
+            <div class="categories-loading-box">
+
+                <i class="fa-solid fa-circle-notch fa-spin"></i>
+
+                <span data-categories-loading-text>
+                    جاري تحميل التصنيفات...
+                </span>
+
+            </div>
+        </div>
+
+
+        <!-- =================================================
+             PANEL HEADER
+        ================================================== -->
+
+        <div class="categories-panel-header">
+
+            <div class="categories-panel-title">
+
+                <div class="categories-panel-title-icon">
+                    <i class="fa-solid fa-list"></i>
+                </div>
+
+                <div>
+
+                    <h2>
+                        قائمة التصنيفات
+                    </h2>
+
+                    <p>
+                        إدارة جميع التصنيفات الموجودة في النظام
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="categories-selection-area">
+
+                <div class="categories-selected-count">
+
+                    تم تحديد
+
+                    <span
+                        data-categories-selected-count
+                    >
+                        0
+                    </span>
+
+                    تصنيف
+
+                </div>
+
+                <button
+                    type="button"
+                    class="categories-delete-selected"
+                    data-categories-delete-selected
+                    disabled
+                >
+
+                    <i class="fa-solid fa-trash"></i>
+
+                    حذف المحدد
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TOOLBAR
+        ================================================== -->
+
+        <div class="categories-toolbar">
+
+            <div class="categories-toolbar-left">
+
+                <div class="categories-search">
+
+                    <i
+                        class="fa-solid fa-magnifying-glass search-icon"
+                    ></i>
+
+                    <input
+                        type="search"
+                        data-category-search
+                        placeholder="ابحث عن تصنيف..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        type="button"
+                        class="categories-search-clear"
+                        id="categorySearchClear"
+                        title="مسح البحث"
+                        aria-label="مسح البحث"
+                    >
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div class="categories-filter">
+
+                    <select
+                        data-category-status
+                        aria-label="فلترة حالة التصنيف"
+                    >
+
+                        <option value="">
+                            كل الحالات
+                        </option>
+
+                        <option value="active">
+                            نشط
+                        </option>
+
+                        <option value="inactive">
+                            غير نشط
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="categories-refresh"
+                    data-categories-refresh
+                >
+
+                    <i class="fa-solid fa-rotate"></i>
+
+                    تحديث
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div class="categories-table-wrapper">
+
+            <table
+                class="categories-table"
+                data-categories-table
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+
+                            <input
+                                type="checkbox"
+                                class="categories-select-all"
+                                data-categories-select-all
+                                aria-label="تحديد جميع التصنيفات"
+                            >
+
+                        </th>
+
+                        <th>
+                            التصنيف
+                        </th>
+
+                        <th>
+                            الوصف
+                        </th>
+
+                        <th>
+                            المنتجات
+                        </th>
+
+                        <th>
+                            الحالة
+                        </th>
+
+                        <th>
+                            تاريخ الإنشاء
+                        </th>
+
+                        <th>
+                            آخر تحديث
+                        </th>
+
+                        <th>
+                            الإجراءات
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody data-categories-body>
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="categories-empty-cell"
+                        >
+
+                            <div class="categories-empty">
+
+                                <i
+                                    class="fa-solid fa-circle-notch fa-spin"
+                                ></i>
+
+                                <strong>
+                                    جاري تحميل التصنيفات...
+                                </strong>
+
+                                <span>
+                                    يرجى الانتظار لحظات.
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGINATION
+        ================================================== -->
+
+        <div class="categories-pagination-wrapper">
+
+            <div data-categories-pagination></div>
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+        <div class="categories-footer">
+
+            <span>
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                البيانات محفوظة في قاعدة البيانات.
+
+            </span>
+
+            <span>
+
+                إجمالي التصنيفات:
+
+                <strong
+                    data-categories-total
+                    style="margin-right:4px;"
+                >
+                    0
+                </strong>
+
+            </span>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     CATEGORY MODAL
+========================================================= -->
+
+<div
+    class="category-modal"
+    data-category-modal
+    aria-hidden="true"
+>
+
+    <div
+        class="category-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="categoryModalTitle"
+    >
+
+        <div class="category-modal-header">
+
+            <div class="category-modal-title-wrap">
+
+                <div class="category-modal-title-icon">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                </div>
+
+                <div>
+
+                    <h3
+                        data-category-modal-title
+                        id="categoryModalTitle"
+                    >
+                        إضافة تصنيف جديد
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="category-modal-close"
+                data-category-modal-close
+                aria-label="إغلاق"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form
+            data-category-form
+            novalidate
+        >
+
+            <input
+                type="hidden"
+                name="id"
+                data-category-id
+                value=""
+            >
+
+
+            <!-- NAME -->
+
+            <div class="category-form-group">
+
+                <label
+                    class="category-form-label"
+                    for="categoryNameInput"
+                >
+
+                    اسم التصنيف
+
+                    <span class="required">
+                        *
+                    </span>
+
+                </label>
+
+                <input
+                    type="text"
+                    class="category-form-control"
+                    name="name"
+                    id="categoryNameInput"
+                    placeholder="مثال: إلكترونيات"
+                    maxlength="150"
+                    required
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="category-form-group">
+
+                <label
+                    class="category-form-label"
+                    for="categoryDescriptionInput"
+                >
+                    وصف التصنيف
+                </label>
+
+                <textarea
+                    class="category-form-control"
+                    name="description"
+                    id="categoryDescriptionInput"
+                    placeholder="اكتب وصفًا مختصرًا للتصنيف..."
+                    maxlength="500"
+                ></textarea>
+
+            </div>
+
+
+            <!-- ICON -->
+
+            <div class="category-form-group">
+
+                <label
+                    class="category-form-label"
+                    for="categoryIconInput"
+                >
+                    أيقونة التصنيف
+                </label>
+
+                <div class="category-icon-input">
+
+                    <div
+                        class="category-icon-preview"
+                        id="categoryIconPreview"
+                    >
+
+                        <i
+                            class="fa-solid fa-folder"
+                        ></i>
+
+                    </div>
+
+                    <input
+                        type="text"
+                        class="category-form-control"
+                        name="icon"
+                        id="categoryIconInput"
+                        value="fa-folder"
+                        placeholder="fa-folder"
+                        maxlength="80"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="category-form-group">
+
+                <div class="category-checkbox-wrapper">
+
+                    <input
+                        type="checkbox"
+                        name="is_active"
+                        id="categoryIsActive"
+                        value="true"
+                        checked
+                    >
+
+                    <label
+                        for="categoryIsActive"
+                    >
+                        التصنيف نشط ومتاح للاستخدام
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="category-form-actions">
+
+                <button
+                    type="button"
+                    class="category-modal-cancel"
+                    data-category-modal-cancel
+                >
+                    إلغاء
+                </button>
+
+                <button
+                    type="submit"
+                    class="category-modal-submit"
+                >
+
+                    <i class="fa-solid fa-check"></i>
+
+                    <span data-category-submit-text>
+                        حفظ التصنيف
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="categories-toast-container"
+    data-categories-toast-container
+    aria-live="polite"
+    aria-atomic="true"
+></div>
+
+
+<!-- =========================================================
+     PAGE HELPERS
+========================================================= -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /*
+     * ========================================================
+     * DOM
+     * ========================================================
+     */
+
+    const page =
+        document.querySelector("[data-categories]");
+
+    if (!page) {
+        return;
+    }
+
+
+    const searchInput =
+        page.querySelector("[data-category-search]");
+
+    const clearSearch =
+        page.querySelector("#categorySearchClear");
+
+    const iconInput =
+        page.querySelector("#categoryIconInput");
+
+    const iconPreview =
+        page.querySelector("#categoryIconPreview");
+
+    const modal =
+        document.querySelector("[data-category-modal]");
+
+    const modalCard =
+        modal
+            ? modal.querySelector(".category-modal-card")
+            : null;
+
+    const form =
+        document.querySelector("[data-category-form]");
+
+    const modalTitle =
+        document.querySelector("[data-category-modal-title]");
+
+    const modalId =
+        document.querySelector("[data-category-id]");
+
+    const nameInput =
+        document.querySelector("#categoryNameInput");
+
+    const descriptionInput =
+        document.querySelector("#categoryDescriptionInput");
+
+    const activeInput =
+        document.querySelector("#categoryIsActive");
+
+    const submitText =
+        document.querySelector("[data-category-submit-text]");
+
+    const toastContainer =
+        document.querySelector("[data-categories-toast-container]");
+
+
+    /*
+     * ========================================================
+     * ENDPOINTS
+     * ========================================================
+     */
+
+    const endpoints = {
+
+        list:
+            page.dataset.categoriesEndpoint ||
+            "/api/categories",
+
+        create:
+            page.dataset.createEndpoint ||
+            "/api/categories",
+
+        update:
+            page.dataset.updateEndpoint ||
+            "/api/categories/{id}",
+
+        delete:
+            page.dataset.deleteEndpoint ||
+            "/api/categories/{id}",
+
+        toggleStatus:
+            page.dataset.toggleStatusEndpoint ||
+            "/api/categories/{id}/status"
+
+    };
+
+
+    /*
+     * ========================================================
+     * STATE
+     * ========================================================
+     */
+
+    const state = {
+
+        categories: [],
+
+        filteredCategories: [],
+
+        selectedIds: new Set(),
+
+        currentPage: 1,
+
+        perPage: 10,
+
+        loading: false,
+
+        editingId: null,
+
+        search: "",
+
+        status: ""
+
+    };
+
+
+    /*
+     * ========================================================
+     * SMARTPOS GLOBAL
+     * ========================================================
+     */
+
+    window.SmartPOS =
+        window.SmartPOS || {};
+
+    SmartPOS.categories =
+        SmartPOS.categories || {};
+
+    SmartPOS.categories.state =
+        state;
+
+
+    /*
+     * ========================================================
+     * HELPERS
+     * ========================================================
+     */
+
+    function escapeHTML(value) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            value == null
+                ? ""
+                : String(value);
+
+        return div.innerHTML;
+    }
+
+
+    function normalizeBoolean(value) {
+
+        if (
+            value === true ||
+            value === 1 ||
+            value === "1" ||
+            value === "true" ||
+            value === "True"
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    function getCategoryId(category) {
+
+        return (
+            category.id ??
+            category.category_id ??
+            category._id ??
+            category.uuid
+        );
+    }
+
+
+    function getCategoryName(category) {
+
+        return (
+            category.name ??
+            category.category_name ??
+            category.title ??
+            ""
+        );
+    }
+
+
+    function getCategoryDescription(category) {
+
+        return (
+            category.description ??
+            category.desc ??
+            ""
+        );
+    }
+
+
+    function getCategoryIcon(category) {
+
+        let icon =
+            category.icon ??
+            category.icon_class ??
+            "fa-folder";
+
+        icon = String(icon).trim();
+
+        if (!icon) {
+            icon = "fa-folder";
+        }
+
+        if (icon.includes("fa-")) {
+            return icon;
+        }
+
+        return "fa-folder";
+    }
+
+
+    function getCategoryActive(category) {
+
+        if (
+            category.is_active !== undefined
+        ) {
+            return normalizeBoolean(
+                category.is_active
+            );
+        }
+
+        if (
+            category.active !== undefined
+        ) {
+            return normalizeBoolean(
+                category.active
+            );
+        }
+
+        if (
+            category.status !== undefined
+        ) {
+            return String(
+                category.status
+            ).toLowerCase() === "active";
+        }
+
+        return true;
+    }
+
+
+    function getProductCount(category) {
+
+        return Number(
+            category.product_count ??
+            category.products_count ??
+            category.productsCount ??
+            category.products ??
+            0
+        ) || 0;
+    }
+
+
+    function getCreatedDate(category) {
+
+        return (
+            category.created_at ??
+            category.createdAt ??
+            category.creation_date ??
+            category.date_created ??
+            ""
+        );
+    }
+
+
+    function getUpdatedDate(category) {
+
+        return (
+            category.updated_at ??
+            category.updatedAt ??
+            category.modified_at ??
+            category.date_updated ??
+            ""
+        );
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "—";
+        }
+
+        try {
+
+            const date =
+                new Date(value);
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+                return String(value);
+            }
+
+            return date.toLocaleDateString(
+                "ar-EG",
+                {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric"
+                }
+            );
+
+        } catch (error) {
+
+            return String(value);
+        }
+    }
+
+
+    function formatNumber(value) {
+
+        return Number(value || 0)
+            .toLocaleString("ar-EG");
+    }
+
+
+    function makeEndpoint(template, id) {
+
+        return String(template)
+            .replace(
+                "{id}",
+                encodeURIComponent(id)
+            );
+    }
+
+
+    function getCSRFToken() {
+
+        const meta =
+            document.querySelector(
+                'meta[name="csrf-token"]'
+            );
+
+        if (meta) {
+            return meta.getAttribute("content");
+        }
+
+        const input =
+            document.querySelector(
+                'input[name="csrf_token"]'
+            );
+
+        if (input) {
+            return input.value;
+        }
+
+        return null;
+    }
+
+
+    /*
+     * ========================================================
+     * TOAST
+     * ========================================================
+     */
+
+    function showToast(
+        message,
+        type = "info",
+        title = ""
+    ) {
+
+        if (!toastContainer) {
+            return;
+        }
+
+        const toast =
+            document.createElement("div");
+
+        toast.className =
+            `categories-toast ${type}`;
+
+        let icon =
+            "fa-circle-info";
+
+        if (type === "success") {
+            icon = "fa-circle-check";
+        }
+
+        if (type === "error") {
+            icon = "fa-circle-exclamation";
+        }
+
+        if (type === "warning") {
+            icon = "fa-triangle-exclamation";
+        }
+
+        toast.innerHTML = `
+
+            <div class="categories-toast-icon">
+
+                <i class="fa-solid ${icon}"></i>
+
+            </div>
+
+            <div class="categories-toast-content">
+
+                <strong>
+                    ${escapeHTML(
+                        title ||
+                        (
+                            type === "success"
+                                ? "تمت العملية بنجاح"
+                                : type === "error"
+                                    ? "حدث خطأ"
+                                    : "تنبيه"
+                        )
+                    )}
+                </strong>
+
+                <span>
+                    ${escapeHTML(message)}
+                </span>
+
+            </div>
+        `;
+
+        toastContainer.appendChild(toast);
+
+        setTimeout(function () {
+
+            toast.style.opacity = "0";
+            toast.style.transform =
+                "translateY(10px)";
+
+            setTimeout(function () {
+                toast.remove();
+            }, 250);
+
+        }, 4500);
+    }
+
+
+    /*
+     * ========================================================
+     * LOADING
+     * ========================================================
+     */
+
+    function setLoading(
+        loading,
+        message = "جاري تحميل التصنيفات..."
+    ) {
+
+        state.loading = loading;
+
+        const overlay =
+            document.querySelector(
+                "[data-categories-loading]"
+            );
+
+        const loadingText =
+            document.querySelector(
+                "[data-categories-loading-text]"
+            );
+
+        if (!overlay) {
+            return;
+        }
+
+        if (loadingText) {
+            loadingText.textContent =
+                message;
+        }
+
+        overlay.hidden =
+            !loading;
+    }
+
+
+    /*
+     * ========================================================
+     * FETCH JSON
+     * ========================================================
+     */
+
+    async function request(
+        url,
+        options = {}
+    ) {
+
+        const headers =
+            new Headers(
+                options.headers || {}
+            );
+
+        headers.set(
+            "Accept",
+            "application/json"
+        );
+
+        if (
+            options.body &&
+            !headers.has(
+                "Content-Type"
+            )
+        ) {
+
+            headers.set(
+                "Content-Type",
+                "application/json"
+            );
+        }
+
+        const csrf =
+            getCSRFToken();
+
+        if (csrf) {
+
+            headers.set(
+                "X-CSRFToken",
+                csrf
+            );
+
+            headers.set(
+                "X-CSRF-Token",
+                csrf
+            );
+        }
+
+        const response =
+            await fetch(
+                url,
+                {
+                    ...options,
+                    headers,
+                    credentials: "same-origin"
+                }
+            );
+
+        const text =
+            await response.text();
+
+        let data = null;
+
+        if (text) {
+
+            try {
+                data = JSON.parse(text);
+            } catch (error) {
+
+                data = {
+                    raw: text
+                };
+            }
+        }
+
+        if (!response.ok) {
+
+            let message =
+                `HTTP ${response.status}`;
+
+            if (
+                data &&
+                typeof data === "object"
+            ) {
+
+                message =
+                    data.message ||
+                    data.error ||
+                    data.detail ||
+                    message;
+            }
+
+            throw new Error(message);
+        }
+
+        return data;
+    }
+
+
+    /*
+     * ========================================================
+     * EXTRACT LIST
+     * ========================================================
+     */
+
+    function extractCategories(data) {
+
+        if (Array.isArray(data)) {
+            return data;
+        }
+
+        if (
+            data &&
+            Array.isArray(
+                data.categories
+            )
+        ) {
+            return data.categories;
+        }
+
+        if (
+            data &&
+            Array.isArray(
+                data.data
+            )
+        ) {
+            return data.data;
+        }
+
+        if (
+            data &&
+            data.data &&
+            Array.isArray(
+                data.data.categories
+            )
+        ) {
+            return data.data.categories;
+        }
+
+        if (
+            data &&
+            Array.isArray(
+                data.results
+            )
+        ) {
+            return data.results;
+        }
+
+        if (
+            data &&
+            Array.isArray(
+                data.items
+            )
+        ) {
+            return data.items;
+        }
+
+        return [];
+    }
+
+
+    /*
+     * ========================================================
+     * LOAD CATEGORIES
+     * ========================================================
+     */
+
+    async function loadCategories(
+        showLoader = true
+    ) {
+
+        if (state.loading) {
+            return;
+        }
+
+        if (showLoader) {
+
+            setLoading(
+                true,
+                "جاري تحميل التصنيفات..."
+            );
+        }
+
+        try {
+
+            const data =
+                await request(
+                    endpoints.list,
+                    {
+                        method: "GET"
+                    }
+                );
+
+            state.categories =
+                extractCategories(data);
+
+            if (
+                !Array.isArray(
+                    state.categories
+                )
+            ) {
+
+                state.categories = [];
+            }
+
+            state.categories =
+                state.categories.map(
+                    function (category) {
+
+                        return {
+                            ...category,
+
+                            id:
+                                getCategoryId(
+                                    category
+                                ),
+
+                            name:
+                                getCategoryName(
+                                    category
+                                ),
+
+                            description:
+                                getCategoryDescription(
+                                    category
+                                ),
+
+                            icon:
+                                getCategoryIcon(
+                                    category
+                                ),
+
+                            is_active:
+                                getCategoryActive(
+                                    category
+                                ),
+
+                            product_count:
+                                getProductCount(
+                                    category
+                                )
+                        };
+                    }
+                );
+
+            SmartPOS.categories.state =
+                state;
+
+            state.selectedIds.clear();
+
+            applyFilters();
+
+            updateStatistics();
+
+            updateSelectionUI();
+
+        } catch (error) {
+
+            console.error(
+                "Categories loading error:",
+                error
+            );
+
+            state.categories = [];
+
+            renderError(
+                error.message ||
+                "تعذر تحميل التصنيفات."
+            );
+
+            updateStatistics();
+
+            showToast(
+                error.message ||
+                "تعذر الاتصال بخادم التصنيفات.",
+                "error",
+                "فشل تحميل التصنيفات"
+            );
+
+        } finally {
+
+            setLoading(false);
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * FILTER
+     * ========================================================
+     */
+
+    function applyFilters() {
+
+        const search =
+            state.search
+                .trim()
+                .toLowerCase();
+
+        const status =
+            state.status;
+
+        state.filteredCategories =
+            state.categories.filter(
+                function (category) {
+
+                    const name =
+                        getCategoryName(
+                            category
+                        ).toLowerCase();
+
+                    const description =
+                        getCategoryDescription(
+                            category
+                        ).toLowerCase();
+
+                    const matchesSearch =
+                        !search ||
+                        name.includes(search) ||
+                        description.includes(search);
+
+                    const active =
+                        getCategoryActive(
+                            category
+                        );
+
+                    const matchesStatus =
+                        !status ||
+                        (
+                            status === "active"
+                                ? active
+                                : !active
+                        );
+
+                    return (
+                        matchesSearch &&
+                        matchesStatus
+                    );
+                }
+            );
+
+        const maxPage =
+            Math.max(
+                1,
+                Math.ceil(
+                    state.filteredCategories.length /
+                    state.perPage
+                )
+            );
+
+        if (
+            state.currentPage >
+            maxPage
+        ) {
+            state.currentPage =
+                maxPage;
+        }
+
+        renderTable();
+        renderPagination();
+        updateSelectionUI();
+    }
+
+
+    /*
+     * ========================================================
+     * RENDER TABLE
+     * ========================================================
+     */
+
+    function renderTable() {
+
+        const body =
+            document.querySelector(
+                "[data-categories-body]"
+            );
+
+        if (!body) {
+            return;
+        }
+
+        const start =
+            (
+                state.currentPage - 1
+            ) *
+            state.perPage;
+
+        const end =
+            start +
+            state.perPage;
+
+        const rows =
+            state.filteredCategories
+                .slice(start, end);
+
+        if (!rows.length) {
+
+            body.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="categories-empty-cell"
+                    >
+
+                        <div class="categories-empty">
+
+                            <i class="fa-solid fa-folder-open"></i>
+
+                            <strong>
+                                لا توجد تصنيفات
+                            </strong>
+
+                            <span>
+                                لم يتم العثور على تصنيفات مطابقة للبحث أو الفلترة.
+                            </span>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+            `;
+
+            updateSelectAllState();
+
+            return;
+        }
+
+        body.innerHTML =
+            rows.map(
+                function (category) {
+
+                    return renderCategoryRow(
+                        category
+                    );
+                }
+            ).join("");
+
+        bindRowEvents();
+
+        updateSelectAllState();
+    }
+
+
+    /*
+     * ========================================================
+     * CATEGORY ROW
+     * ========================================================
+     */
+
+    function renderCategoryRow(
+        category
+    ) {
+
+        const id =
+            getCategoryId(category);
+
+        const name =
+            getCategoryName(category);
+
+        const description =
+            getCategoryDescription(
+                category
+            );
+
+        const icon =
+            getCategoryIcon(category);
+
+        const active =
+            getCategoryActive(category);
+
+        const productCount =
+            getProductCount(category);
+
+        const created =
+            formatDate(
+                getCreatedDate(category)
+            );
+
+        const updated =
+            formatDate(
+                getUpdatedDate(category)
+            );
+
+        const checked =
+            state.selectedIds.has(
+                String(id)
+            )
+                ? "checked"
+                : "";
+
+        return `
+
+            <tr
+                data-category-row-id="${escapeHTML(id)}"
+            >
+
+                <td>
+
+                    <input
+                        type="checkbox"
+                        class="category-checkbox"
+                        data-category-checkbox
+                        data-id="${escapeHTML(id)}"
+                        ${checked}
+                        aria-label="تحديد ${escapeHTML(name)}"
+                    >
+
+                </td>
+
+
+                <td>
+
+                    <div class="category-table-info">
+
+                        <div class="category-icon">
+
+                            <i
+                                class="fa-solid ${escapeHTML(icon)}"
+                            ></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(name)}
+                            </strong>
+
+                            <small>
+                                #${escapeHTML(id)}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="category-description"
+                        title="${escapeHTML(description)}"
+                    >
+                        ${escapeHTML(
+                            description || "لا يوجد وصف"
+                        )}
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span class="category-products-count">
+
+                        ${formatNumber(productCount)}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="category-status ${
+                            active
+                                ? "active"
+                                : "inactive"
+                        }"
+                    >
+
+                        ${
+                            active
+                                ? "نشط"
+                                : "غير نشط"
+                        }
+
+                    </span>
+
+                </td>
+
+
+                <td>
+                    ${escapeHTML(created)}
+                </td>
+
+
+                <td>
+                    ${escapeHTML(updated)}
+                </td>
+
+
+                <td>
+
+                    <div class="category-actions">
+
+                        <button
+                            type="button"
+                            class="btn-primary"
+                            data-category-edit
+                            data-id="${escapeHTML(id)}"
+                            title="تعديل"
+                            aria-label="تعديل التصنيف"
+                        >
+
+                            <i class="fa-solid fa-pen"></i>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-warning"
+                            data-category-toggle
+                            data-id="${escapeHTML(id)}"
+                            title="${
+                                active
+                                    ? "تعطيل"
+                                    : "تفعيل"
+                            }"
+                            aria-label="تغيير حالة التصنيف"
+                        >
+
+                            <i
+                                class="fa-solid ${
+                                    active
+                                        ? "fa-toggle-on"
+                                        : "fa-toggle-off"
+                                }"
+                            ></i>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="btn-danger"
+                            data-category-delete
+                            data-id="${escapeHTML(id)}"
+                            title="حذف"
+                            aria-label="حذف التصنيف"
+                        >
+
+                            <i class="fa-solid fa-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+        `;
+    }
+
+
+    /*
+     * ========================================================
+     * ROW EVENTS
+     * ========================================================
+     */
+
+    function bindRowEvents() {
+
+        document
+            .querySelectorAll(
+                "[data-category-checkbox]"
+            )
+            .forEach(
+                function (checkbox) {
+
+                    checkbox.addEventListener(
+                        "change",
+                        function () {
+
+                            const id =
+                                String(
+                                    this.dataset.id
+                                );
+
+                            if (this.checked) {
+
+                                state.selectedIds.add(
+                                    id
+                                );
+
+                            } else {
+
+                                state.selectedIds.delete(
+                                    id
+                                );
+                            }
+
+                            updateSelectionUI();
+                            updateSelectAllState();
+                        }
+                    );
+                }
+            );
+
+
+        document
+            .querySelectorAll(
+                "[data-category-edit]"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            openEditModal(
+                                this.dataset.id
+                            );
+                        }
+                    );
+                }
+            );
+
+
+        document
+            .querySelectorAll(
+                "[data-category-delete]"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            deleteCategory(
+                                this.dataset.id
+                            );
+                        }
+                    );
+                }
+            );
+
+
+        document
+            .querySelectorAll(
+                "[data-category-toggle]"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            toggleCategory(
+                                this.dataset.id
+                            );
+                        }
+                    );
+                }
+            );
+    }
+
+
+    /*
+     * ========================================================
+     * STATISTICS
+     * ========================================================
+     */
+
+    function updateStatistics() {
+
+        const total =
+            state.categories.length;
+
+        let active = 0;
+        let used = 0;
+        let empty = 0;
+
+        state.categories.forEach(
+            function (category) {
+
+                if (
+                    getCategoryActive(
+                        category
+                    )
+                ) {
+                    active++;
+                }
+
+                if (
+                    getProductCount(
+                        category
+                    ) > 0
+                ) {
+                    used++;
+                } else {
+                    empty++;
+                }
+            }
+        );
+
+        document
+            .querySelectorAll(
+                "[data-categories-total]"
+            )
+            .forEach(
+                function (element) {
+
+                    element.textContent =
+                        formatNumber(total);
+                }
+            );
+
+        const activeElement =
+            document.getElementById(
+                "categoriesActiveCount"
+            );
+
+        const usedElement =
+            document.getElementById(
+                "categoriesUsedCount"
+            );
+
+        const emptyElement =
+            document.getElementById(
+                "categoriesEmptyCount"
+            );
+
+        if (activeElement) {
+            activeElement.textContent =
+                formatNumber(active);
+        }
+
+        if (usedElement) {
+            usedElement.textContent =
+                formatNumber(used);
+        }
+
+        if (emptyElement) {
+            emptyElement.textContent =
+                formatNumber(empty);
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * PAGINATION
+     * ========================================================
+     */
+
+    function renderPagination() {
+
+        const container =
+            document.querySelector(
+                "[data-categories-pagination]"
+            );
+
+        if (!container) {
+            return;
+        }
+
+        const total =
+            state.filteredCategories.length;
+
+        const pages =
+            Math.ceil(
+                total /
+                state.perPage
+            );
+
+        if (pages <= 1) {
+
+            container.innerHTML = "";
+            return;
+        }
+
+        let html = "";
+
+        html += `
+
+            <button
+                type="button"
+                class="pagination-btn"
+                data-page="${state.currentPage - 1}"
+                ${state.currentPage === 1 ? "disabled" : ""}
+            >
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        `;
+
+        const visiblePages =
+            getVisiblePages(
+                state.currentPage,
+                pages
+            );
+
+        visiblePages.forEach(
+            function (pageNumber) {
+
+                if (pageNumber === "...") {
+
+                    html += `
+                        <span class="pagination-dots">
+                            ...
+                        </span>
+                    `;
+
+                    return;
+                }
+
+                html += `
+
+                    <button
+                        type="button"
+                        class="pagination-btn ${
+                            pageNumber ===
+                            state.currentPage
+                                ? "active"
+                                : ""
+                        }"
+                        data-page="${pageNumber}"
+                    >
+                        ${pageNumber}
+                    </button>
+                `;
+            }
+        );
+
+        html += `
+
+            <button
+                type="button"
+                class="pagination-btn"
+                data-page="${state.currentPage + 1}"
+                ${
+                    state.currentPage === pages
+                        ? "disabled"
+                        : ""
+                }
+            >
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+        `;
+
+        container.innerHTML = html;
+
+        container
+            .querySelectorAll(
+                "[data-page]"
+            )
+            .forEach(
+                function (button) {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            const page =
+                                Number(
+                                    this.dataset.page
+                                );
+
+                            if (
+                                !Number.isFinite(
+                                    page
+                                ) ||
+                                page < 1 ||
+                                page > pages
+                            ) {
+                                return;
+                            }
+
+                            state.currentPage =
+                                page;
+
+                            renderTable();
+                            renderPagination();
+
+                            window.scrollTo({
+                                top:
+                                    document
+                                        .querySelector(
+                                            ".categories-panel"
+                                        )
+                                        ?.offsetTop ||
+                                    0,
+                                behavior: "smooth"
+                            });
+                        }
+                    );
+                }
+            );
+    }
+
+
+    function getVisiblePages(
+        current,
+        total
+    ) {
+
+        if (total <= 7) {
+
+            return Array.from(
+                {
+                    length: total
+                },
+                function (_, index) {
+                    return index + 1;
+                }
+            );
+        }
+
+        const pages = [1];
+
+        if (current > 4) {
+            pages.push("...");
+        }
+
+        const start =
+            Math.max(
+                2,
+                current - 1
+            );
+
+        const end =
+            Math.min(
+                total - 1,
+                current + 1
+            );
+
+        for (
+            let i = start;
+            i <= end;
+            i++
+        ) {
+
+            if (
+                !pages.includes(i)
+            ) {
+                pages.push(i);
+            }
+        }
+
+        if (current < total - 3) {
+            pages.push("...");
+        }
+
+        pages.push(total);
+
+        return pages;
+    }
+
+
+    /*
+     * ========================================================
+     * SELECTION
+     * ========================================================
+     */
+
+    function updateSelectionUI() {
+
+        const count =
+            state.selectedIds.size;
+
+        const counter =
+            document.querySelector(
+                "[data-categories-selected-count]"
+            );
+
+        const deleteButton =
+            document.querySelector(
+                "[data-categories-delete-selected]"
+            );
+
+        if (counter) {
+            counter.textContent =
+                formatNumber(count);
+        }
+
+        if (deleteButton) {
+
+            deleteButton.disabled =
+                count === 0;
+
+            deleteButton.style.opacity =
+                count === 0
+                    ? ".55"
+                    : "1";
+
+            deleteButton.style.cursor =
+                count === 0
+                    ? "not-allowed"
+                    : "pointer";
+        }
+    }
+
+
+    function updateSelectAllState() {
+
+        const selectAll =
+            document.querySelector(
+                "[data-categories-select-all]"
+            );
+
+        if (!selectAll) {
+            return;
+        }
+
+        const visible =
+            state.filteredCategories
+                .slice(
+                    (
+                        state.currentPage - 1
+                    ) *
+                    state.perPage,
+
+                    (
+                        state.currentPage
+                    ) *
+                    state.perPage
+                );
+
+        const visibleIds =
+            visible.map(
+                function (category) {
+                    return String(
+                        getCategoryId(
+                            category
+                        )
+                    );
+                }
+            );
+
+        const selectedVisible =
+            visibleIds.filter(
+                function (id) {
+                    return state.selectedIds.has(id);
+                }
+            );
+
+        selectAll.checked =
+            visibleIds.length > 0 &&
+            selectedVisible.length ===
+            visibleIds.length;
+
+        selectAll.indeterminate =
+            selectedVisible.length > 0 &&
+            selectedVisible.length <
+            visibleIds.length;
+    }
+
+
+    /*
+     * ========================================================
+     * MODAL
+     * ========================================================
+     */
+
+    function openModal(
+        category = null
+    ) {
+
+        if (!modal || !form) {
+            return;
+        }
+
+        state.editingId =
+            category
+                ? getCategoryId(category)
+                : null;
+
+        form.reset();
+
+        if (modalId) {
+            modalId.value =
+                state.editingId || "";
+        }
+
+        if (category) {
+
+            if (modalTitle) {
+                modalTitle.textContent =
+                    "تعديل التصنيف";
+            }
+
+            if (submitText) {
+                submitText.textContent =
+                    "حفظ التعديلات";
+            }
+
+            if (nameInput) {
+                nameInput.value =
+                    getCategoryName(
+                        category
+                    );
+            }
+
+            if (descriptionInput) {
+                descriptionInput.value =
+                    getCategoryDescription(
+                        category
+                    );
+            }
+
+            if (iconInput) {
+                iconInput.value =
+                    getCategoryIcon(
+                        category
+                    );
+            }
+
+            if (activeInput) {
+                activeInput.checked =
+                    getCategoryActive(
+                        category
+                    );
+            }
+
+        } else {
+
+            if (modalTitle) {
+                modalTitle.textContent =
+                    "إضافة تصنيف جديد";
+            }
+
+            if (submitText) {
+                submitText.textContent =
+                    "حفظ التصنيف";
+            }
+
+            if (iconInput) {
+                iconInput.value =
+                    "fa-folder";
+            }
+
+            if (activeInput) {
+                activeInput.checked =
+                    true;
+            }
+        }
+
+        updateIconPreview();
+
+        modal.classList.add("is-open");
+
+        modal.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+        document.body.classList.add(
+            "modal-open"
+        );
+
+        setTimeout(
+            function () {
+
+                if (nameInput) {
+                    nameInput.focus();
+                }
+
+            },
+            100
+        );
+    }
+
+
+    function closeModal() {
+
+        if (!modal) {
+            return;
+        }
+
+        modal.classList.remove(
+            "is-open"
+        );
+
+        modal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        document.body.classList.remove(
+            "modal-open"
+        );
+
+        state.editingId =
+            null;
+
+        if (form) {
+            form.reset();
+        }
+
+        if (iconInput) {
+            iconInput.value =
+                "fa-folder";
+        }
+
+        if (activeInput) {
+            activeInput.checked =
+                true;
+        }
+
+        updateIconPreview();
+    }
+
+
+    SmartPOS.categories.closeModal =
+        closeModal;
+
+
+    function openEditModal(id) {
+
+        const category =
+            state.categories.find(
+                function (item) {
+
+                    return String(
+                        getCategoryId(item)
+                    ) === String(id);
+                }
+            );
+
+        if (!category) {
+
+            showToast(
+                "لم يتم العثور على التصنيف.",
+                "error"
+            );
+
+            return;
+        }
+
+        openModal(category);
+    }
+
+
+    /*
+     * ========================================================
+     * ICON
+     * ========================================================
+     */
+
+    function updateIconPreview() {
+
+        if (
+            !iconInput ||
+            !iconPreview
+        ) {
+            return;
+        }
+
+        let icon =
+            iconInput.value.trim();
+
+        if (!icon) {
+            icon = "fa-folder";
+        }
+
+        const safeIcon =
+            icon
+                .replace(
+                    /[^a-zA-Z0-9\-_ ]/g,
+                    ""
+                )
+                .trim();
+
+        iconPreview.innerHTML = `
+
+            <i
+                class="fa-solid ${
+                    escapeHTML(
+                        safeIcon ||
+                        "fa-folder"
+                    )
+                }"
+            ></i>
+        `;
+    }
+
+
+    /*
+     * ========================================================
+     * FORM SUBMIT
+     * ========================================================
+     */
+
+    async function saveCategory(
+        event
+    ) {
+
+        event.preventDefault();
+
+        if (!form) {
+            return;
+        }
+
+        const name =
+            nameInput
+                ? nameInput.value.trim()
+                : "";
+
+        if (!name) {
+
+            showToast(
+                "يرجى إدخال اسم التصنيف.",
+                "warning",
+                "بيانات ناقصة"
+            );
+
+            if (nameInput) {
+                nameInput.focus();
+            }
+
+            return;
+        }
+
+        const payload = {
+
+            name: name,
+
+            description:
+                descriptionInput
+                    ? descriptionInput.value.trim()
+                    : "",
+
+            icon:
+                iconInput
+                    ? (
+                        iconInput.value.trim() ||
+                        "fa-folder"
+                    )
+                    : "fa-folder",
+
+            is_active:
+                activeInput
+                    ? Boolean(
+                        activeInput.checked
+                    )
+                    : true
+        };
+
+        const editing =
+            state.editingId !== null &&
+            state.editingId !== undefined &&
+            state.editingId !== "";
+
+        const url =
+            editing
+                ? makeEndpoint(
+                    endpoints.update,
+                    state.editingId
+                )
+                : endpoints.create;
+
+        const method =
+            editing
+                ? "PUT"
+                : "POST";
+
+        form.classList.add(
+            "is-loading"
+        );
+
+        setLoading(
+            true,
+            editing
+                ? "جاري حفظ التعديلات..."
+                : "جاري حفظ التصنيف..."
+        );
+
+        try {
+
+            const data =
+                await request(
+                    url,
+                    {
+                        method,
+                        body:
+                            JSON.stringify(
+                                payload
+                            )
+                    }
+                );
+
+            closeModal();
+
+            showToast(
+                editing
+                    ? "تم تعديل التصنيف وحفظ التغييرات في قاعدة البيانات."
+                    : "تم إنشاء التصنيف وحفظه في قاعدة البيانات.",
+                "success"
+            );
+
+            await loadCategories(
+                false
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Category save error:",
+                error
+            );
+
+            showToast(
+                error.message ||
+                "تعذر حفظ التصنيف.",
+                "error",
+                editing
+                    ? "فشل تعديل التصنيف"
+                    : "فشل إضافة التصنيف"
+            );
+
+        } finally {
+
+            form.classList.remove(
+                "is-loading"
+            );
+
+            setLoading(false);
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * DELETE CATEGORY
+     * ========================================================
+     */
+
+    async function deleteCategory(
+        id
+    ) {
+
+        const category =
+            state.categories.find(
+                function (item) {
+
+                    return String(
+                        getCategoryId(item)
+                    ) === String(id);
+                }
+            );
+
+        if (!category) {
+
+            showToast(
+                "التصنيف غير موجود.",
+                "error"
+            );
+
+            return;
+        }
+
+        const name =
+            getCategoryName(category);
+
+        const confirmed =
+            window.confirm(
+                `هل أنت متأكد من حذف التصنيف "${name}"؟\n\nسيتم حذف التصنيف فعليًا من قاعدة البيانات.`
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setLoading(
+            true,
+            "جاري حذف التصنيف..."
+        );
+
+        try {
+
+            await request(
+                makeEndpoint(
+                    endpoints.delete,
+                    id
+                ),
+                {
+                    method: "DELETE"
+                }
+            );
+
+            state.selectedIds.delete(
+                String(id)
+            );
+
+            showToast(
+                `تم حذف التصنيف "${name}" نهائيًا.`,
+                "success",
+                "تم الحذف"
+            );
+
+            await loadCategories(
+                false
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Category delete error:",
+                error
+            );
+
+            showToast(
+                error.message ||
+                "تعذر حذف التصنيف.",
+                "error",
+                "فشل الحذف"
+            );
+
+        } finally {
+
+            setLoading(false);
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * BULK DELETE
+     * ========================================================
+     */
+
+    async function deleteSelected() {
+
+        const ids =
+            Array.from(
+                state.selectedIds
+            );
+
+        if (!ids.length) {
+
+            showToast(
+                "لم تحدد أي تصنيف.",
+                "warning"
+            );
+
+            return;
+        }
+
+        const confirmed =
+            window.confirm(
+                `هل أنت متأكد من حذف ${ids.length} تصنيف؟\n\nسيتم حذفها فعليًا من قاعدة البيانات.`
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setLoading(
+            true,
+            "جاري حذف التصنيفات المحددة..."
+        );
+
+        let successCount = 0;
+        let failedCount = 0;
+
+        try {
+
+            for (
+                const id of ids
+            ) {
+
+                try {
+
+                    await request(
+                        makeEndpoint(
+                            endpoints.delete,
+                            id
+                        ),
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+                    successCount++;
+
+                } catch (error) {
+
+                    failedCount++;
+
+                    console.error(
+                        `Failed deleting category ${id}:`,
+                        error
+                    );
+                }
+            }
+
+            state.selectedIds.clear();
+
+            await loadCategories(
+                false
+            );
+
+            if (failedCount === 0) {
+
+                showToast(
+                    `تم حذف ${successCount} تصنيف بنجاح.`,
+                    "success",
+                    "اكتمل الحذف"
+                );
+
+            } else {
+
+                showToast(
+                    `تم حذف ${successCount} تصنيف، وفشل حذف ${failedCount}.`,
+                    "warning",
+                    "تمت العملية جزئيًا"
+                );
+            }
+
+        } finally {
+
+            setLoading(false);
+            updateSelectionUI();
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * TOGGLE STATUS
+     * ========================================================
+     */
+
+    async function toggleCategory(
+        id
+    ) {
+
+        const category =
+            state.categories.find(
+                function (item) {
+
+                    return String(
+                        getCategoryId(item)
+                    ) === String(id);
+                }
+            );
+
+        if (!category) {
+            return;
+        }
+
+        const current =
+            getCategoryActive(
+                category
+            );
+
+        const next =
+            !current;
+
+        const name =
+            getCategoryName(
+                category
+            );
+
+        setLoading(
+            true,
+            next
+                ? "جاري تفعيل التصنيف..."
+                : "جاري تعطيل التصنيف..."
+        );
+
+        try {
+
+            await request(
+                makeEndpoint(
+                    endpoints.toggleStatus,
+                    id
+                ),
+                {
+                    method: "PATCH",
+
+                    body:
+                        JSON.stringify(
+                            {
+                                is_active:
+                                    next,
+
+                                active:
+                                    next,
+
+                                status:
+                                    next
+                                        ? "active"
+                                        : "inactive"
+                            }
+                        )
+                }
+            );
+
+            showToast(
+                next
+                    ? `تم تفعيل "${name}".`
+                    : `تم تعطيل "${name}".`,
+                "success"
+            );
+
+            await loadCategories(
+                false
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Category status error:",
+                error
+            );
+
+            showToast(
+                error.message ||
+                "تعذر تغيير حالة التصنيف.",
+                "error"
+            );
+
+        } finally {
+
+            setLoading(false);
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * ERROR RENDER
+     * ========================================================
+     */
+
+    function renderError(
+        message
+    ) {
+
+        const body =
+            document.querySelector(
+                "[data-categories-body]"
+            );
+
+        if (!body) {
+            return;
+        }
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="categories-empty-cell"
+                >
+
+                    <div class="categories-error-state">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        <strong>
+                            تعذر تحميل التصنيفات
+                        </strong>
+
+                        <span>
+                            ${escapeHTML(
+                                message ||
+                                "حدث خطأ أثناء الاتصال بالخادم."
+                            )}
+                        </span>
+
+                        <button
+                            type="button"
+                            data-categories-error-retry
+                        >
+                            <i class="fa-solid fa-rotate"></i>
+                            إعادة المحاولة
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+        `;
+
+        const retry =
+            body.querySelector(
+                "[data-categories-error-retry]"
+            );
+
+        if (retry) {
+
+            retry.addEventListener(
+                "click",
+                function () {
+                    loadCategories(true);
+                }
+            );
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * SEARCH
+     * ========================================================
+     */
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                state.search =
+                    this.value || "";
+
+                state.currentPage =
+                    1;
+
+                applyFilters();
+            }
+        );
+    }
+
+
+    if (clearSearch) {
+
+        clearSearch.addEventListener(
+            "click",
+            function () {
+
+                if (searchInput) {
+
+                    searchInput.value =
+                        "";
+
+                    searchInput.dispatchEvent(
+                        new Event(
+                            "input",
+                            {
+                                bubbles: true
+                            }
+                        )
+                    );
+
+                    searchInput.focus();
+                }
+            }
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * STATUS FILTER
+     * ========================================================
+     */
+
+    const statusFilter =
+        document.querySelector(
+            "[data-category-status]"
+        );
+
+    if (statusFilter) {
+
+        statusFilter.addEventListener(
+            "change",
+            function () {
+
+                state.status =
+                    this.value || "";
+
+                state.currentPage =
+                    1;
+
+                applyFilters();
+            }
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * SELECT ALL
+     * ========================================================
+     */
+
+    const selectAll =
+        document.querySelector(
+            "[data-categories-select-all]"
+        );
+
+    if (selectAll) {
+
+        selectAll.addEventListener(
+            "change",
+            function () {
+
+                const visible =
+                    state.filteredCategories
+                        .slice(
+                            (
+                                state.currentPage - 1
+                            ) *
+                            state.perPage,
+
+                            (
+                                state.currentPage
+                            ) *
+                            state.perPage
+                        );
+
+                visible.forEach(
+                    function (category) {
+
+                        const id =
+                            String(
+                                getCategoryId(
+                                    category
+                                )
+                            );
+
+                        if (selectAll.checked) {
+
+                            state.selectedIds.add(
+                                id
+                            );
+
+                        } else {
+
+                            state.selectedIds.delete(
+                                id
+                            );
+                        }
+                    }
+                );
+
+                renderTable();
+                updateSelectionUI();
+                updateSelectAllState();
+            }
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * ADD BUTTON
+     * ========================================================
+     */
+
+    const addButton =
+        document.querySelector(
+            "[data-category-add]"
+        );
+
+    if (addButton) {
+
+        addButton.addEventListener(
+            "click",
+            function () {
+
+                openModal();
+            }
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * MODAL CLOSE
+     * ========================================================
+     */
+
+    document
+        .querySelectorAll(
+            "[data-category-modal-close], [data-category-modal-cancel]"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        closeModal();
+                    }
+                );
+            }
+        );
+
+
+    if (modal) {
+
+        modal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeModal();
+                }
+            }
+        );
+    }
+
+
+    if (modalCard) {
+
+        modalCard.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+            }
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * ESCAPE
+     * ========================================================
+     */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                modal &&
+                modal.classList.contains(
+                    "is-open"
+                )
+            ) {
+
+                closeModal();
+            }
+        }
+    );
+
+
+    /*
+     * ========================================================
+     * ICON INPUT
+     * ========================================================
+     */
+
+    if (iconInput) {
+
+        iconInput.addEventListener(
+            "input",
+            updateIconPreview
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * FORM
+     * ========================================================
+     */
+
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            saveCategory
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * BULK DELETE
+     * ========================================================
+     */
+
+    const bulkDelete =
+        document.querySelector(
+            "[data-categories-delete-selected]"
+        );
+
+    if (bulkDelete) {
+
+        bulkDelete.addEventListener(
+            "click",
+            deleteSelected
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * REFRESH
+     * ========================================================
+     */
+
+    const refreshButton =
+        document.querySelector(
+            "[data-categories-refresh]"
+        );
+
+    if (refreshButton) {
+
+        refreshButton.addEventListener(
+            "click",
+            async function () {
+
+                const icon =
+                    this.querySelector(
+                        "i"
+                    );
+
+                if (icon) {
+                    icon.classList.add(
+                        "fa-spin"
+                    );
+                }
+
+                try {
+
+                    await loadCategories(
+                        true
+                    );
+
+                    showToast(
+                        "تم تحديث قائمة التصنيفات.",
+                        "success",
+                        "تم التحديث"
+                    );
+
+                } finally {
+
+                    if (icon) {
+                        icon.classList.remove(
+                            "fa-spin"
+                        );
+                    }
+                }
+            }
+        );
+    }
+
+
+    /*
+     * ========================================================
+     * PUBLIC API
+     * ========================================================
+     */
+
+    SmartPOS.categories.load =
+        loadCategories;
+
+    SmartPOS.categories.refresh =
+        loadCategories;
+
+    SmartPOS.categories.openModal =
+        openModal;
+
+    SmartPOS.categories.openEdit =
+        openEditModal;
+
+    SmartPOS.categories.delete =
+        deleteCategory;
+
+    SmartPOS.categories.deleteSelected =
+        deleteSelected;
+
+    SmartPOS.categories.toggle =
+        toggleCategory;
+
+    SmartPOS.categories.applyFilters =
+        applyFilters;
+
+
+    /*
+     * ========================================================
+     * INITIALIZE
+     * ========================================================
+     */
+
+    updateIconPreview();
+
+    updateSelectionUI();
+
+    /*
+     * مهم:
+     * لا ننتظر categories.js حتى نبدأ.
+     * هذا يمنع حالة "جاري تحميل التصنيفات" من البقاء
+     * إذا كان categories.js لا يحتوي على initialization.
+     */
+
+    loadCategories(true);
+
+
+})();
+
+</script>
+
+
+<!-- =========================================================
+     EXISTING CATEGORIES JS
+========================================================= -->
+
+<script
+    src="{{ url_for('static', filename='js/categories.js') }}"
+    defer
+></script>
+
+{% endblock %}
