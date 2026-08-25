@@ -1,0 +1,1612 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+حالة النظام | SMART POS ERP
+{% endblock %}
+
+{% block page_title %}
+حالة النظام
+{% endblock %}
+
+{% block breadcrumb %}
+حالة النظام
+{% endblock %}
+
+
+{# ==============================================================
+   HEALTH PAGE CSS
+   ============================================================== #}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/health.css') }}"
+>
+
+{% endblock %}
+
+
+{# ==============================================================
+   HEALTH PAGE CONTENT
+   ============================================================== #}
+
+{% block content %}
+
+<div
+    id="healthPage"
+    class="health-page"
+    data-health-endpoint="{{ url_for('health_api') }}"
+    data-page="system-health"
+    data-version="1.0.0"
+    data-application="SMART POS / ERP"
+>
+
+
+    {# ==========================================================
+       PAGE HEADER
+       ========================================================== #}
+
+    <section
+        class="health-page-header"
+        aria-labelledby="healthPageTitle"
+    >
+
+        <div class="health-header-content">
+
+            <div
+                class="health-header-icon"
+                aria-hidden="true"
+            >
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+            </div>
+
+
+            <div class="health-header-text">
+
+                <div class="health-header-eyebrow">
+
+                    <span
+                        id="healthLiveDot"
+                        class="health-live-dot"
+                    ></span>
+
+                    <span>
+                        مركز مراقبة النظام
+                    </span>
+
+                    <span class="health-header-separator">
+                        •
+                    </span>
+
+                    <span>
+                        SMART POS / ERP
+                    </span>
+
+                </div>
+
+
+                <h1
+                    id="healthPageTitle"
+                    class="health-page-title"
+                >
+                    حالة النظام
+                </h1>
+
+
+                <p class="health-page-description">
+
+                    مركز مراقبة متكامل لمتابعة حالة التطبيق،
+                    قاعدة البيانات، واجهة API، الجلسة والاتصال
+                    في الوقت الفعلي.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="health-header-actions">
+
+            <div
+                id="healthAutoRefreshIndicator"
+                class="health-auto-refresh"
+            >
+
+                <span class="health-auto-refresh-dot"></span>
+
+                <span>
+                    المراقبة مفعلة
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="healthCheckButton"
+                class="health-action-button health-action-primary"
+            >
+
+                <i class="fa-solid fa-stethoscope"></i>
+
+                <span>
+                    فحص النظام
+                </span>
+
+            </button>
+
+
+            <button
+                type="button"
+                id="healthRefreshButton"
+                class="health-action-button health-action-secondary"
+            >
+
+                <i class="fa-solid fa-arrows-rotate"></i>
+
+                <span>
+                    تحديث
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       GLOBAL STATUS
+       ========================================================== #}
+
+    <section
+        id="healthOverview"
+        class="health-overview-card health-state-checking"
+        aria-live="polite"
+    >
+
+        <div class="health-overview-main">
+
+            <div
+                id="healthOverviewIcon"
+                class="health-overview-status-icon"
+            >
+
+                <i
+                    id="healthOverviewIconSymbol"
+                    class="fa-solid fa-heart-pulse"
+                ></i>
+
+            </div>
+
+
+            <div class="health-overview-information">
+
+                <span class="health-overview-label">
+                    الحالة العامة للنظام
+                </span>
+
+
+                <h2
+                    id="healthOverallStatus"
+                    class="health-overview-title"
+                >
+                    جاري فحص النظام...
+                </h2>
+
+
+                <p
+                    id="healthOverallMessage"
+                    class="health-overview-message"
+                >
+                    يتم الاتصال بخدمات النظام والتحقق من حالتها.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="health-overview-meta">
+
+            <div
+                id="healthOverallBadge"
+                class="health-status-badge health-status-loading"
+            >
+
+                <span class="health-status-badge-icon">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                </span>
+
+                <span id="healthOverallBadgeText">
+                    جاري الفحص
+                </span>
+
+            </div>
+
+
+            <div class="health-last-check">
+
+                <span class="health-last-check-label">
+                    آخر فحص
+                </span>
+
+                <strong
+                    id="healthLastCheck"
+                    class="health-last-check-value"
+                >
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       QUICK METRICS
+       ========================================================== #}
+
+    <section
+        class="health-metrics-grid"
+        aria-label="مؤشرات النظام"
+    >
+
+
+        <article class="health-metric-card">
+
+            <div class="health-metric-icon health-metric-success">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+
+            <div class="health-metric-content">
+
+                <span>
+                    الخدمات السليمة
+                </span>
+
+                <strong id="healthHealthyCount">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="health-metric-card">
+
+            <div class="health-metric-icon health-metric-warning">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+            </div>
+
+
+            <div class="health-metric-content">
+
+                <span>
+                    التحذيرات
+                </span>
+
+                <strong id="healthWarningCount">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="health-metric-card">
+
+            <div class="health-metric-icon health-metric-danger">
+
+                <i class="fa-solid fa-circle-xmark"></i>
+
+            </div>
+
+
+            <div class="health-metric-content">
+
+                <span>
+                    الأخطاء
+                </span>
+
+                <strong id="healthErrorCount">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="health-metric-card">
+
+            <div class="health-metric-icon health-metric-primary">
+
+                <i class="fa-solid fa-server"></i>
+
+            </div>
+
+
+            <div class="health-metric-content">
+
+                <span>
+                    نسبة التوفر
+                </span>
+
+                <strong id="healthUptime">
+                    --
+                </strong>
+
+            </div>
+
+        </article>
+
+
+    </section>
+
+
+
+    {# ==========================================================
+       SYSTEM SCORE
+       ========================================================== #}
+
+    <section
+        class="health-score-section"
+        aria-label="صحة النظام"
+    >
+
+        <div class="health-score-card">
+
+            <div class="health-score-header">
+
+                <div>
+
+                    <span class="health-section-eyebrow">
+                        SYSTEM HEALTH
+                    </span>
+
+                    <h2 class="health-section-title">
+                        مؤشر صحة النظام
+                    </h2>
+
+                    <p class="health-section-description">
+                        تقييم مبني على نتائج الخدمات التي تم فحصها فعليًا.
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="health-score-icon"
+                    aria-hidden="true"
+                >
+
+                    <i class="fa-solid fa-gauge-high"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-score-content">
+
+                <div
+                    id="healthScoreCircle"
+                    class="health-score-circle"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    aria-valuenow="0"
+                >
+
+                    <div class="health-score-inner">
+
+                        <strong
+                            id="healthScore"
+                            class="health-score-number"
+                        >
+                            --
+                        </strong>
+
+                        <span class="health-score-percent">
+                            %
+                        </span>
+
+                        <span class="health-score-caption">
+                            صحة النظام
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-score-details">
+
+                    <div class="health-score-detail">
+
+                        <span class="health-score-detail-icon success">
+
+                            <i class="fa-solid fa-check"></i>
+
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                <span id="healthScoreHealthy">
+                                    0
+                                </span>
+                            </strong>
+
+                            <span>
+                                خدمات سليمة
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="health-score-detail">
+
+                        <span class="health-score-detail-icon warning">
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                <span id="healthScoreWarnings">
+                                    0
+                                </span>
+                            </strong>
+
+                            <span>
+                                تحذيرات
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="health-score-detail">
+
+                        <span class="health-score-detail-icon danger">
+
+                            <i class="fa-solid fa-xmark"></i>
+
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                <span id="healthScoreErrors">
+                                    0
+                                </span>
+                            </strong>
+
+                            <span>
+                                أخطاء
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        {# ======================================================
+           AVAILABILITY
+           ====================================================== #}
+
+        <div class="health-uptime-card">
+
+            <div class="health-uptime-header">
+
+                <div>
+
+                    <span class="health-section-eyebrow">
+                        SYSTEM AVAILABILITY
+                    </span>
+
+                    <h2 class="health-section-title">
+                        توفر النظام
+                    </h2>
+
+                </div>
+
+
+                <div
+                    class="health-uptime-icon"
+                    aria-hidden="true"
+                >
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-uptime-main">
+
+                <strong
+                    id="healthUptimeLarge"
+                    class="health-uptime-number"
+                >
+                    --
+                </strong>
+
+                <span>
+                    نسبة الخدمات المتاحة
+                </span>
+
+            </div>
+
+
+            <div
+                class="health-uptime-bar"
+                aria-hidden="true"
+            >
+
+                <span
+                    id="healthUptimeProgress"
+                    class="health-uptime-progress"
+                    style="width:0%;"
+                ></span>
+
+            </div>
+
+
+            <div class="health-uptime-footer">
+
+                <span>
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    الخدمات المتاحة
+
+                </span>
+
+                <strong id="healthServicesOnline">
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       CORE SERVICES
+       ========================================================== #}
+
+    <section
+        class="health-section"
+        aria-labelledby="coreServicesTitle"
+    >
+
+        <div class="health-section-header">
+
+            <div>
+
+                <span class="health-section-eyebrow">
+                    CORE SERVICES
+                </span>
+
+                <h2
+                    id="coreServicesTitle"
+                    class="health-section-title"
+                >
+                    الخدمات الأساسية
+                </h2>
+
+                <p class="health-section-description">
+                    نتائج الفحص الفعلية للخدمات الأساسية التي يعتمد عليها النظام.
+                </p>
+
+            </div>
+
+
+            <div class="health-section-status">
+
+                <span
+                    id="healthMonitoringDot"
+                    class="health-mini-status-dot"
+                ></span>
+
+                <span id="healthMonitoringText">
+                    مراقبة مباشرة
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="healthServicesGrid"
+            class="health-services-grid"
+        >
+
+
+            {# DATABASE #}
+
+            <article
+                class="health-service-card"
+                data-service="database"
+                data-status="checking"
+            >
+
+                <div class="health-service-top">
+
+                    <div class="health-service-icon database">
+
+                        <i class="fa-solid fa-database"></i>
+
+                    </div>
+
+
+                    <div class="health-service-status">
+
+                        <span class="health-service-status-dot"></span>
+
+                        <span class="health-service-status-text">
+                            جاري الفحص
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-service-body">
+
+                    <h3>
+                        قاعدة البيانات
+                    </h3>
+
+                    <p>
+                        التحقق من اتصال قاعدة البيانات وتنفيذ
+                        استعلام اختبار فعلي.
+                    </p>
+
+                </div>
+
+
+                <div class="health-service-footer">
+
+                    <span>
+                        DATABASE
+                    </span>
+
+                    <strong data-service-value="database">
+                        جاري الفحص
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            {# SERVER #}
+
+            <article
+                class="health-service-card"
+                data-service="server"
+                data-status="checking"
+            >
+
+                <div class="health-service-top">
+
+                    <div class="health-service-icon server">
+
+                        <i class="fa-solid fa-server"></i>
+
+                    </div>
+
+
+                    <div class="health-service-status">
+
+                        <span class="health-service-status-dot"></span>
+
+                        <span class="health-service-status-text">
+                            جاري الفحص
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-service-body">
+
+                    <h3>
+                        خادم التطبيق
+                    </h3>
+
+                    <p>
+                        التحقق من قدرة خادم Flask على استقبال
+                        الطلبات والاستجابة لها.
+                    </p>
+
+                </div>
+
+
+                <div class="health-service-footer">
+
+                    <span>
+                        FLASK SERVER
+                    </span>
+
+                    <strong data-service-value="server">
+                        جاري الفحص
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            {# API #}
+
+            <article
+                class="health-service-card"
+                data-service="api"
+                data-status="checking"
+            >
+
+                <div class="health-service-top">
+
+                    <div class="health-service-icon api">
+
+                        <i class="fa-solid fa-code"></i>
+
+                    </div>
+
+
+                    <div class="health-service-status">
+
+                        <span class="health-service-status-dot"></span>
+
+                        <span class="health-service-status-text">
+                            جاري الفحص
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-service-body">
+
+                    <h3>
+                        واجهة API
+                    </h3>
+
+                    <p>
+                        قياس استجابة نقطة الفحص والتحقق من
+                        وصول البيانات من الخادم.
+                    </p>
+
+                </div>
+
+
+                <div class="health-service-footer">
+
+                    <span>
+                        REST API
+                    </span>
+
+                    <strong data-service-value="api">
+                        جاري الفحص
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            {# AUTHENTICATION #}
+
+            <article
+                class="health-service-card"
+                data-service="authentication"
+                data-status="checking"
+            >
+
+                <div class="health-service-top">
+
+                    <div class="health-service-icon security">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                    </div>
+
+
+                    <div class="health-service-status">
+
+                        <span class="health-service-status-dot"></span>
+
+                        <span class="health-service-status-text">
+                            جاري الفحص
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-service-body">
+
+                    <h3>
+                        المصادقة والحماية
+                    </h3>
+
+                    <p>
+                        التحقق من وجود المستخدم والجلسة
+                        الحالية وإمكانية الوصول للصفحة.
+                    </p>
+
+                </div>
+
+
+                <div class="health-service-footer">
+
+                    <span>
+                        AUTHENTICATION
+                    </span>
+
+                    <strong data-service-value="authentication">
+                        جاري الفحص
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            {# FRONTEND #}
+
+            <article
+                class="health-service-card"
+                data-service="frontend"
+                data-status="checking"
+            >
+
+                <div class="health-service-top">
+
+                    <div class="health-service-icon frontend">
+
+                        <i class="fa-solid fa-display"></i>
+
+                    </div>
+
+
+                    <div class="health-service-status">
+
+                        <span class="health-service-status-dot"></span>
+
+                        <span class="health-service-status-text">
+                            جاري الفحص
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-service-body">
+
+                    <h3>
+                        واجهة المستخدم
+                    </h3>
+
+                    <p>
+                        التحقق من تشغيل الصفحة الحالية وملفات
+                        CSS وJavaScript الأساسية.
+                    </p>
+
+                </div>
+
+
+                <div class="health-service-footer">
+
+                    <span>
+                        FRONTEND
+                    </span>
+
+                    <strong data-service-value="frontend">
+                        جاري الفحص
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+
+            {# SESSION #}
+
+            <article
+                class="health-service-card"
+                data-service="session"
+                data-status="checking"
+            >
+
+                <div class="health-service-top">
+
+                    <div class="health-service-icon session">
+
+                        <i class="fa-solid fa-user-check"></i>
+
+                    </div>
+
+
+                    <div class="health-service-status">
+
+                        <span class="health-service-status-dot"></span>
+
+                        <span class="health-service-status-text">
+                            جاري الفحص
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="health-service-body">
+
+                    <h3>
+                        جلسة المستخدم
+                    </h3>
+
+                    <p>
+                        التحقق من حالة المستخدم الحالي وإمكانية
+                        الوصول إلى الصفحات المحمية.
+                    </p>
+
+                </div>
+
+
+                <div class="health-service-footer">
+
+                    <span>
+                        SESSION
+                    </span>
+
+                    <strong data-service-value="session">
+                        جاري الفحص
+                    </strong>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       DATABASE DETAILS
+       ========================================================== #}
+
+    <section
+        class="health-section"
+        aria-labelledby="databaseSectionTitle"
+    >
+
+        <div class="health-section-header">
+
+            <div>
+
+                <span class="health-section-eyebrow">
+                    DATABASE
+                </span>
+
+                <h2
+                    id="databaseSectionTitle"
+                    class="health-section-title"
+                >
+                    معلومات قاعدة البيانات
+                </h2>
+
+                <p class="health-section-description">
+                    معلومات يتم تحديثها بناءً على آخر فحص فعلي.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="health-database-grid">
+
+
+            <div class="health-info-card">
+
+                <div class="health-info-icon">
+
+                    <i class="fa-solid fa-plug"></i>
+
+                </div>
+
+
+                <div class="health-info-content">
+
+                    <span>
+                        حالة الاتصال
+                    </span>
+
+                    <strong id="databaseConnectionStatus">
+                        جاري الفحص...
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-info-card">
+
+                <div class="health-info-icon">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                </div>
+
+
+                <div class="health-info-content">
+
+                    <span>
+                        اختبار الاتصال
+                    </span>
+
+                    <strong id="databasePingStatus">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-info-card">
+
+                <div class="health-info-icon">
+
+                    <i class="fa-solid fa-stopwatch"></i>
+
+                </div>
+
+
+                <div class="health-info-content">
+
+                    <span>
+                        زمن الاستجابة
+                    </span>
+
+                    <strong id="databaseResponseTime">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="health-info-card">
+
+                <div class="health-info-icon">
+
+                    <i class="fa-solid fa-clock"></i>
+
+                </div>
+
+
+                <div class="health-info-content">
+
+                    <span>
+                        آخر فحص
+                    </span>
+
+                    <strong id="databaseLastCheck">
+                        --
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       SYSTEM INFORMATION
+       ========================================================== #}
+
+    <section
+        class="health-section"
+        aria-labelledby="systemInformationTitle"
+    >
+
+        <div class="health-section-header">
+
+            <div>
+
+                <span class="health-section-eyebrow">
+                    SYSTEM INFORMATION
+                </span>
+
+                <h2
+                    id="systemInformationTitle"
+                    class="health-section-title"
+                >
+                    معلومات النظام
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="health-information-grid">
+
+
+            {# APPLICATION #}
+
+            <div class="health-information-card">
+
+                <div class="health-information-card-header">
+
+                    <div class="health-information-icon">
+
+                        <i class="fa-solid fa-microchip"></i>
+
+                    </div>
+
+                    <span>
+                        التطبيق
+                    </span>
+
+                </div>
+
+
+                <div class="health-information-list">
+
+                    <div class="health-information-row">
+
+                        <span>
+                            النظام
+                        </span>
+
+                        <strong>
+                            SMART POS / ERP
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-information-row">
+
+                        <span>
+                            الإصدار
+                        </span>
+
+                        <strong>
+                            1.0.0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-information-row">
+
+                        <span>
+                            حالة الخادم
+                        </span>
+
+                        <strong id="applicationServerStatus">
+                            جاري الفحص...
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            {# BROWSER #}
+
+            <div class="health-information-card">
+
+                <div class="health-information-card-header">
+
+                    <div class="health-information-icon">
+
+                        <i class="fa-solid fa-globe"></i>
+
+                    </div>
+
+                    <span>
+                        بيئة المستخدم
+                    </span>
+
+                </div>
+
+
+                <div class="health-information-list">
+
+                    <div class="health-information-row">
+
+                        <span>
+                            المتصفح
+                        </span>
+
+                        <strong id="browserName">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-information-row">
+
+                        <span>
+                            المنصة
+                        </span>
+
+                        <strong id="platformName">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-information-row">
+
+                        <span>
+                            الاتصال
+                        </span>
+
+                        <strong id="networkStatus">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            {# TIME #}
+
+            <div class="health-information-card">
+
+                <div class="health-information-card-header">
+
+                    <div class="health-information-icon">
+
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    </div>
+
+                    <span>
+                        التوقيت
+                    </span>
+
+                </div>
+
+
+                <div class="health-information-list">
+
+                    <div class="health-information-row">
+
+                        <span>
+                            آخر فحص
+                        </span>
+
+                        <strong id="lastSystemCheck">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-information-row">
+
+                        <span>
+                            وقت الخادم
+                        </span>
+
+                        <strong id="serverTime">
+                            --
+                        </strong>
+
+                    </div>
+
+
+                    <div class="health-information-row">
+
+                        <span>
+                            الاتصال
+                        </span>
+
+                        <strong id="connectionHealth">
+                            --
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       ACTIVITY LOG
+       ========================================================== #}
+
+    <section
+        class="health-section"
+        aria-labelledby="activityTitle"
+    >
+
+        <div class="health-section-header">
+
+            <div>
+
+                <span class="health-section-eyebrow">
+                    MONITORING ACTIVITY
+                </span>
+
+                <h2
+                    id="activityTitle"
+                    class="health-section-title"
+                >
+                    سجل فحوصات النظام
+                </h2>
+
+                <p class="health-section-description">
+                    سجل محلي لعمليات الفحص التي تمت من هذه الصفحة.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="clearHealthActivity"
+                class="health-clear-button"
+            >
+
+                <i class="fa-solid fa-trash-can"></i>
+
+                <span>
+                    مسح السجل
+                </span>
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="healthActivityList"
+            class="health-activity-list"
+        >
+
+            <div
+                id="healthActivityEmpty"
+                class="health-empty-state"
+            >
+
+                <div class="health-empty-icon">
+
+                    <i class="fa-solid fa-wave-square"></i>
+
+                </div>
+
+
+                <h3>
+                    لا توجد عمليات فحص بعد
+                </h3>
+
+
+                <p>
+                    ستظهر نتائج الفحوصات هنا تلقائيًا.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       SYSTEM NOTICE
+       ========================================================== #}
+
+    <section
+        id="healthNotices"
+        class="health-notices"
+        aria-live="polite"
+    >
+
+        <div class="health-notice-icon">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+        </div>
+
+
+        <div class="health-notice-content">
+
+            <strong>
+                نظام المراقبة
+            </strong>
+
+            <p id="healthNoticeMessage">
+                يتم تحديث النتائج عند إجراء فحص فعلي للخادم.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    {# ==========================================================
+       ERROR PANEL
+       ========================================================== #}
+
+    <section
+        id="healthErrorPanel"
+        class="health-error-panel"
+        hidden
+        role="alert"
+    >
+
+        <div class="health-error-icon">
+
+            <i class="fa-solid fa-triangle-exclamation"></i>
+
+        </div>
+
+
+        <div class="health-error-content">
+
+            <strong>
+                تعذر إكمال فحص النظام
+            </strong>
+
+
+            <p id="healthErrorMessage">
+                تعذر الاتصال بخدمة حالة النظام.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="healthRetryButton"
+            class="health-error-retry"
+        >
+
+            <i class="fa-solid fa-rotate-right"></i>
+
+            <span>
+                إعادة المحاولة
+            </span>
+
+        </button>
+
+    </section>
+
+
+
+    {# ==========================================================
+       LOADING OVERLAY
+       ========================================================== #}
+
+    <div
+        id="healthLoadingOverlay"
+        class="health-loading-overlay"
+        hidden
+        aria-hidden="true"
+    >
+
+        <div class="health-loading-box">
+
+            <div class="health-loading-spinner">
+
+                <i class="fa-solid fa-heart-pulse"></i>
+
+            </div>
+
+
+            <strong>
+                جاري فحص النظام
+            </strong>
+
+
+            <span>
+                يتم الاتصال بالخادم والتحقق من الخدمات...
+            </span>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+
+{# ==============================================================
+   HEALTH PAGE JAVASCRIPT
+   ============================================================== #}
+
+{% block extra_js %}
+
+<script
+    src="{{ url_for('static', filename='js/health.js') }}"
+    defer
+></script>
+
+{% endblock %}

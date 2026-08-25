@@ -1,0 +1,2581 @@
+{% extends "base.html" %}
+
+{% block title %}لوحة التحكم | SMART POS ERP{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   SMART POS / ERP
+   PREMIUM EXECUTIVE DASHBOARD
+   Arabic RTL
+   Flask / Jinja Compatible
+   ========================================================= */
+
+:root {
+    --dash-primary: #4f46e5;
+    --dash-primary-dark: #3730a3;
+    --dash-primary-soft: #eef2ff;
+
+    --dash-blue: #2563eb;
+    --dash-blue-soft: #eff6ff;
+
+    --dash-green: #059669;
+    --dash-green-soft: #ecfdf5;
+
+    --dash-orange: #ea580c;
+    --dash-orange-soft: #fff7ed;
+
+    --dash-red: #dc2626;
+    --dash-red-soft: #fef2f2;
+
+    --dash-purple: #7c3aed;
+    --dash-purple-soft: #f5f3ff;
+
+    --dash-text: #111827;
+    --dash-text-2: #374151;
+    --dash-muted: #7b8494;
+    --dash-border: #e8ebf0;
+
+    --dash-bg: #f5f7fb;
+    --dash-white: #ffffff;
+
+    --dash-radius: 22px;
+    --dash-shadow:
+        0 10px 35px rgba(15, 23, 42, .055);
+
+    --dash-shadow-hover:
+        0 20px 45px rgba(15, 23, 42, .11);
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.dashboard-page {
+    position: relative;
+    min-height: 100%;
+    padding: 30px;
+    direction: rtl;
+    background:
+        radial-gradient(
+            circle at 95% 0%,
+            rgba(79, 70, 229, .055),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 5% 35%,
+            rgba(37, 99, 235, .035),
+            transparent 25%
+        );
+}
+
+
+/* =========================================================
+   HERO HEADER
+   ========================================================= */
+
+.dashboard-hero {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 30px;
+
+    margin-bottom: 25px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #111827 0%,
+            #1e1b4b 48%,
+            #312e81 100%
+        );
+
+    color: #fff;
+
+    box-shadow:
+        0 20px 55px rgba(30, 27, 75, .22);
+}
+
+
+.dashboard-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    border-radius: 50%;
+
+    top: -160px;
+    left: -80px;
+
+    background: rgba(255,255,255,.06);
+
+    pointer-events: none;
+}
+
+
+.dashboard-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    border-radius: 50%;
+
+    bottom: -110px;
+    right: 25%;
+
+    background: rgba(255,255,255,.045);
+
+    pointer-events: none;
+}
+
+
+.dashboard-hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+
+.dashboard-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    color: rgba(255,255,255,.68);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: .4px;
+}
+
+
+.dashboard-eyebrow-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #34d399;
+
+    box-shadow:
+        0 0 0 5px rgba(52,211,153,.12),
+        0 0 16px rgba(52,211,153,.45);
+}
+
+
+.dashboard-hero h1 {
+    margin: 0;
+
+    font-size: 32px;
+    line-height: 1.2;
+
+    font-weight: 900;
+
+    letter-spacing: -.7px;
+}
+
+
+.dashboard-hero p {
+    margin: 10px 0 0;
+
+    color: rgba(255,255,255,.70);
+
+    font-size: 14px;
+
+    line-height: 1.8;
+}
+
+
+.dashboard-hero-actions {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+
+.hero-action {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 46px;
+
+    padding: 0 17px;
+
+    border-radius: 13px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+.hero-action:hover {
+    transform: translateY(-2px);
+}
+
+
+.hero-action.primary {
+    background: #fff;
+    color: #312e81;
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.14);
+}
+
+
+.hero-action.secondary {
+    color: #fff;
+
+    background: rgba(255,255,255,.10);
+
+    border: 1px solid rgba(255,255,255,.14);
+
+    backdrop-filter: blur(10px);
+}
+
+
+.hero-action.secondary:hover {
+    background: rgba(255,255,255,.16);
+}
+
+
+.hero-action i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   STATISTICS
+   ========================================================= */
+
+.stats-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 17px;
+
+    margin-bottom: 22px;
+}
+
+
+.stat-card {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 155px;
+
+    padding: 22px;
+
+    border:
+        1px solid var(--dash-border);
+
+    border-radius: var(--dash-radius);
+
+    background: var(--dash-white);
+
+    box-shadow: var(--dash-shadow);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.stat-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow: var(--dash-shadow-hover);
+
+    border-color: rgba(79,70,229,.16);
+}
+
+
+.stat-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+
+    left: -70px;
+    bottom: -80px;
+
+    opacity: .8;
+}
+
+
+.stat-card.sales::before {
+    background: #dbeafe;
+}
+
+
+.stat-card.profit::before {
+    background: #d1fae5;
+}
+
+
+.stat-card.products::before {
+    background: #ffedd5;
+}
+
+
+.stat-card.stock::before {
+    background: #fee2e2;
+}
+
+
+.stat-top {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+
+.stat-label {
+    margin-bottom: 8px;
+
+    color: var(--dash-muted);
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+
+.stat-value {
+    color: var(--dash-text);
+
+    font-size: 28px;
+
+    line-height: 1.15;
+
+    font-weight: 900;
+
+    letter-spacing: -.5px;
+}
+
+
+.stat-currency {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #9aa2af;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.stat-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    border-radius: 16px;
+
+    font-size: 21px;
+
+    transition: transform .25s ease;
+}
+
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.08) rotate(-3deg);
+}
+
+
+.stat-card.sales .stat-icon {
+    color: var(--dash-blue);
+    background: var(--dash-blue-soft);
+}
+
+
+.stat-card.profit .stat-icon {
+    color: var(--dash-green);
+    background: var(--dash-green-soft);
+}
+
+
+.stat-card.products .stat-icon {
+    color: var(--dash-orange);
+    background: var(--dash-orange-soft);
+}
+
+
+.stat-card.stock .stat-icon {
+    color: var(--dash-red);
+    background: var(--dash-red-soft);
+}
+
+
+.stat-footer {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin-top: 16px;
+
+    color: #9aa2af;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+.stat-footer i {
+    font-size: 10px;
+}
+
+
+.stat-footer.positive {
+    color: var(--dash-green);
+}
+
+
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.dashboard-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.7fr)
+        minmax(310px, .9fr);
+
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel {
+    overflow: hidden;
+
+    border:
+        1px solid var(--dash-border);
+
+    border-radius: var(--dash-radius);
+
+    background: var(--dash-white);
+
+    box-shadow: var(--dash-shadow);
+
+    transition:
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.panel:hover {
+    border-color: #e1e5ec;
+
+    box-shadow:
+        0 14px 40px rgba(15,23,42,.075);
+}
+
+
+.panel-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 20px 22px;
+
+    border-bottom:
+        1px solid #eef1f5;
+}
+
+
+.panel-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.panel-heading-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 39px;
+    height: 39px;
+
+    flex-shrink: 0;
+
+    border-radius: 12px;
+
+    background: var(--dash-primary-soft);
+
+    color: var(--dash-primary);
+
+    font-size: 15px;
+}
+
+
+.panel-title {
+    margin: 0;
+
+    color: var(--dash-text);
+
+    font-size: 16px;
+    font-weight: 900;
+}
+
+
+.panel-subtitle {
+    margin: 4px 0 0;
+
+    color: #9aa2af;
+
+    font-size: 11px;
+}
+
+
+.panel-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 8px 11px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    color: var(--dash-primary);
+
+    background: var(--dash-primary-soft);
+
+    font-size: 11px;
+    font-weight: 850;
+
+    white-space: nowrap;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.panel-link:hover {
+    background: #e0e7ff;
+
+    transform: translateX(-2px);
+}
+
+
+/* =========================================================
+   SALES TABLE
+   ========================================================= */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.sales-table {
+    width: 100%;
+
+    min-width: 760px;
+
+    border-collapse: collapse;
+}
+
+
+.sales-table th {
+    padding: 13px 18px;
+
+    background: #fafbfc;
+
+    color: #8a93a1;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    text-align: right;
+
+    white-space: nowrap;
+}
+
+
+.sales-table td {
+    padding: 15px 18px;
+
+    border-top:
+        1px solid #f0f2f5;
+
+    color: #374151;
+
+    font-size: 12px;
+
+    vertical-align: middle;
+}
+
+
+.sales-table tbody tr {
+    transition:
+        background .18s ease;
+}
+
+
+.sales-table tbody tr:hover {
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #fafbff
+        );
+}
+
+
+.invoice-number {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 6px 9px;
+
+    border-radius: 8px;
+
+    color: var(--dash-primary);
+
+    background: var(--dash-primary-soft);
+
+    text-decoration: none;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    transition: .2s ease;
+}
+
+
+.invoice-number:hover {
+    background: #e0e7ff;
+
+    transform: translateX(-2px);
+}
+
+
+.cashier-name {
+    font-weight: 750;
+
+    color: #303846;
+}
+
+
+.sale-total {
+    font-weight: 900;
+
+    color: #111827;
+}
+
+
+.sale-profit {
+    color: var(--dash-green);
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.payment-badge,
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+
+.payment-cash {
+    color: #047857;
+
+    background: #ecfdf5;
+}
+
+
+.payment-card {
+    color: #1d4ed8;
+
+    background: #eff6ff;
+}
+
+
+.payment-bank {
+    color: #6d28d9;
+
+    background: #f5f3ff;
+}
+
+
+.payment-wallet {
+    color: #c2410c;
+
+    background: #fff7ed;
+}
+
+
+.status-completed {
+    color: #047857;
+
+    background: #ecfdf5;
+}
+
+
+.status-pending {
+    color: #b45309;
+
+    background: #fffbeb;
+}
+
+
+.status-cancelled {
+    color: #b91c1c;
+
+    background: #fef2f2;
+}
+
+
+/* =========================================================
+   LOW STOCK
+   ========================================================= */
+
+.low-stock-list {
+    padding: 4px 0;
+}
+
+
+.stock-item {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    padding: 15px 20px;
+
+    border-bottom:
+        1px solid #f0f2f5;
+
+    transition:
+        background .18s ease;
+}
+
+
+.stock-item:hover {
+    background: #fffafa;
+}
+
+
+.stock-item:last-child {
+    border-bottom: 0;
+}
+
+
+.stock-product {
+    min-width: 0;
+}
+
+
+.stock-product-name {
+    max-width: 220px;
+
+    overflow: hidden;
+
+    color: #303846;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.stock-product-barcode {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 5px;
+
+    color: #a0a7b3;
+
+    font-size: 10px;
+}
+
+
+.stock-product-barcode::before {
+    content: "▦";
+
+    font-size: 10px;
+}
+
+
+.stock-number {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 48px;
+    min-height: 35px;
+
+    padding: 5px 9px;
+
+    border-radius: 10px;
+
+    color: var(--dash-red);
+
+    background: var(--dash-red-soft);
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    padding: 48px 20px;
+
+    text-align: center;
+
+    color: #929aa7;
+}
+
+
+.empty-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 14px;
+
+    border-radius: 17px;
+
+    background: var(--dash-green-soft);
+
+    color: var(--dash-green);
+
+    font-size: 20px;
+
+    box-shadow:
+        0 8px 20px rgba(5,150,105,.08);
+}
+
+
+.empty-state strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #374151;
+
+    font-size: 13px;
+}
+
+
+.empty-state span {
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   QUICK ACTIONS
+   ========================================================= */
+
+.quick-actions {
+    margin-top: 20px;
+}
+
+
+.quick-actions-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+
+    padding: 20px;
+}
+
+
+.quick-action {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 76px;
+
+    padding: 13px;
+
+    border:
+        1px solid #edf0f4;
+
+    border-radius: 15px;
+
+    background: #fff;
+
+    color: #202938;
+
+    text-decoration: none;
+
+    overflow: hidden;
+
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+
+.quick-action::after {
+    content: "↗";
+
+    position: absolute;
+
+    top: 9px;
+    left: 11px;
+
+    color: #c0c5ce;
+
+    font-size: 11px;
+
+    opacity: 0;
+
+    transform: translate(3px, 3px);
+
+    transition: .2s ease;
+}
+
+
+.quick-action:hover {
+    transform: translateY(-3px);
+
+    border-color:
+        rgba(79,70,229,.18);
+
+    box-shadow:
+        0 10px 25px rgba(15,23,42,.07);
+}
+
+
+.quick-action:hover::after {
+    opacity: 1;
+
+    transform: translate(0,0);
+}
+
+
+.quick-action-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 43px;
+    height: 43px;
+
+    flex-shrink: 0;
+
+    border-radius: 13px;
+
+    background: #f5f7fa;
+
+    font-size: 18px;
+
+    transition:
+        transform .22s ease;
+}
+
+
+.quick-action:hover .quick-action-icon {
+    transform: scale(1.08);
+}
+
+
+.quick-action-text {
+    min-width: 0;
+}
+
+
+.quick-action-text strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #252d3a;
+
+    font-size: 12px;
+
+    font-weight: 900;
+}
+
+
+.quick-action-text span {
+    display: block;
+
+    overflow: hidden;
+
+    color: #969eaa;
+
+    font-size: 10px;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   QUICK ACTION COLORS
+   ========================================================= */
+
+.quick-action:nth-child(1) .quick-action-icon {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+
+.quick-action:nth-child(2) .quick-action-icon {
+    color: #ea580c;
+    background: #fff7ed;
+}
+
+
+.quick-action:nth-child(3) .quick-action-icon {
+    color: #7c3aed;
+    background: #f5f3ff;
+}
+
+
+.quick-action:nth-child(4) .quick-action-icon {
+    color: #059669;
+    background: #ecfdf5;
+}
+
+
+.quick-action:nth-child(5) .quick-action-icon {
+    color: #0891b2;
+    background: #ecfeff;
+}
+
+
+.quick-action:nth-child(6) .quick-action-icon {
+    color: #db2777;
+    background: #fdf2f8;
+}
+
+
+.quick-action:nth-child(7) .quick-action-icon {
+    color: #4f46e5;
+    background: #eef2ff;
+}
+
+
+/* =========================================================
+   DASHBOARD FOOTER INFO
+   ========================================================= */
+
+.dashboard-footer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 20px;
+
+    padding: 15px 18px;
+
+    border:
+        1px solid var(--dash-border);
+
+    border-radius: 15px;
+
+    background: rgba(255,255,255,.72);
+
+    color: #8d96a4;
+
+    font-size: 10px;
+}
+
+
+.dashboard-footer-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    font-weight: 800;
+}
+
+
+.dashboard-footer-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #10b981;
+
+    box-shadow:
+        0 0 0 4px rgba(16,185,129,.10);
+}
+
+
+/* =========================================================
+   LOADING ANIMATION
+   ========================================================= */
+
+.dashboard-page.dashboard-loading .stat-card,
+.dashboard-page.dashboard-loading .panel,
+.dashboard-page.dashboard-loading .quick-action {
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+
+.stat-card,
+.panel,
+.quick-action {
+    opacity: 1;
+
+    transition:
+        opacity .45s ease,
+        transform .45s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.dashboard-page ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+
+.dashboard-page ::-webkit-scrollbar-track {
+    background: #f3f4f6;
+}
+
+
+.dashboard-page ::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+
+    background: #cbd1da;
+}
+
+
+.dashboard-page ::-webkit-scrollbar-thumb:hover {
+    background: #aeb6c2;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1250px) {
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .quick-actions-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 1050px) {
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 760px) {
+
+    .dashboard-page {
+        padding: 18px 13px;
+    }
+
+    .dashboard-hero {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        padding: 24px 20px;
+
+        border-radius: 21px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 26px;
+    }
+
+    .dashboard-hero-actions {
+        width: 100%;
+    }
+
+    .hero-action {
+        flex: 1;
+
+        min-width: 0;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+    }
+
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+
+        padding: 15px;
+    }
+
+    .panel-header {
+        padding: 17px;
+    }
+
+    .dashboard-footer {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .dashboard-page {
+        padding: 13px 10px;
+    }
+
+    .dashboard-hero {
+        padding: 21px 17px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 23px;
+    }
+
+    .dashboard-hero p {
+        font-size: 12px;
+    }
+
+    .hero-action {
+        width: 100%;
+        flex: unset;
+    }
+
+    .stat-card {
+        min-height: 135px;
+
+        padding: 18px;
+    }
+
+    .stat-value {
+        font-size: 25px;
+    }
+
+    .stat-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .quick-action {
+        min-height: 70px;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+
+        transition-duration: .01ms !important;
+    }
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="dashboard-page dashboard-loading" id="dashboardPage">
+
+
+    <!-- =====================================================
+         PREMIUM HERO
+    ====================================================== -->
+
+    <section class="dashboard-hero">
+
+        <div class="dashboard-hero-content">
+
+            <div class="dashboard-eyebrow">
+
+                <span class="dashboard-eyebrow-dot"></span>
+
+                SMART POS ERP
+
+            </div>
+
+
+            <h1>
+                لوحة التحكم
+            </h1>
+
+
+            <p>
+
+                مرحباً
+
+                {% if current_user %}
+                    {{ current_user.full_name }}
+                {% endif %}
+
+                — إليك نظرة سريعة على أداء النظام وحركة المبيعات والمخزون.
+
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-hero-actions">
+
+            {% if current_user and current_user.role in ["admin", "cashier"] %}
+
+            <a
+                href="{{ url_for('pos') }}"
+                class="hero-action primary"
+            >
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                نقطة البيع
+
+            </a>
+
+            {% endif %}
+
+
+            {% if current_user and current_user.role in ["admin", "stock"] %}
+
+            <a
+                href="{{ url_for('products') }}"
+                class="hero-action secondary"
+            >
+
+                <i class="fa-solid fa-box"></i>
+
+                المنتجات
+
+            </a>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="stats-grid">
+
+
+        <!-- SALES -->
+
+        <div class="stat-card sales">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        مبيعات اليوم
+                    </div>
+
+                    <div class="stat-value">
+
+                        {{ "%.2f"|format(total_sales_today|float) }}
+
+                    </div>
+
+                    <span class="stat-currency">
+                        إجمالي المبيعات
+                    </span>
+
+                </div>
+
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-sack-dollar"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-footer positive">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                حركة المبيعات اليوم
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFIT -->
+
+        <div class="stat-card profit">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        أرباح اليوم
+                    </div>
+
+                    <div class="stat-value">
+
+                        {{ "%.2f"|format(total_profit_today|float) }}
+
+                    </div>
+
+                    <span class="stat-currency">
+                        صافي الربح المسجل
+                    </span>
+
+                </div>
+
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-footer positive">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                أداء مالي اليوم
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCTS -->
+
+        <div class="stat-card products">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        إجمالي المنتجات
+                    </div>
+
+                    <div class="stat-value">
+
+                        {{ "{:,}".format(total_products|int) }}
+
+                    </div>
+
+                    <span class="stat-currency">
+                        المنتجات المسجلة بالنظام
+                    </span>
+
+                </div>
+
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-boxes-stacked"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-footer">
+
+                <i class="fa-solid fa-cubes"></i>
+
+                إدارة المنتجات والمخزون
+
+            </div>
+
+        </div>
+
+
+        <!-- LOW STOCK -->
+
+        <div class="stat-card stock">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        مخزون منخفض
+                    </div>
+
+                    <div class="stat-value">
+
+                        {{ low_stock_count }}
+
+                    </div>
+
+                    <span class="stat-currency">
+                        منتجات تحتاج إلى متابعة
+                    </span>
+
+                </div>
+
+
+                <div class="stat-icon">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-footer">
+
+                <i class="fa-solid fa-bell"></i>
+
+                تنبيهات المخزون
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- =================================================
+             LATEST SALES
+        ================================================== -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div class="panel-heading">
+
+                    <div class="panel-heading-icon">
+
+                        <i class="fa-solid fa-receipt"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2 class="panel-title">
+                            آخر عمليات البيع
+                        </h2>
+
+                        <p class="panel-subtitle">
+                            أحدث الفواتير المسجلة في النظام
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <a
+                    href="{{ url_for('sales') }}"
+                    class="panel-link"
+                >
+
+                    عرض الكل
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                </a>
+
+            </div>
+
+
+            {% if latest_sales %}
+
+            <div class="table-wrapper">
+
+                <table class="sales-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                الفاتورة
+                            </th>
+
+                            <th>
+                                الموظف
+                            </th>
+
+                            <th>
+                                الدفع
+                            </th>
+
+                            <th>
+                                الإجمالي
+                            </th>
+
+                            <th>
+                                الربح
+                            </th>
+
+                            <th>
+                                الحالة
+                            </th>
+
+                            <th>
+                                التاريخ
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for sale in latest_sales %}
+
+                        <tr>
+
+
+                            <!-- Invoice -->
+
+                            <td>
+
+                                <a
+                                    href="{{ url_for('invoice', sale_id=sale.id) }}"
+                                    class="invoice-number"
+                                >
+
+                                    <i class="fa-solid fa-file-invoice"></i>
+
+                                    {{ sale.invoice_number }}
+
+                                </a>
+
+                            </td>
+
+
+                            <!-- Cashier -->
+
+                            <td>
+
+                                <span class="cashier-name">
+
+                                    {% if sale.cashier %}
+
+                                        {{ sale.cashier.full_name }}
+
+                                    {% else %}
+
+                                        —
+
+                                    {% endif %}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- Payment -->
+
+                            <td>
+
+                                {% if sale.payment_method == "cash" %}
+
+                                <span class="payment-badge payment-cash">
+
+                                    <i class="fa-solid fa-money-bill"></i>
+
+                                    نقدي
+
+                                </span>
+
+                                {% elif sale.payment_method == "card" %}
+
+                                <span class="payment-badge payment-card">
+
+                                    <i class="fa-solid fa-credit-card"></i>
+
+                                    بطاقة
+
+                                </span>
+
+                                {% elif sale.payment_method == "bank" %}
+
+                                <span class="payment-badge payment-bank">
+
+                                    <i class="fa-solid fa-building-columns"></i>
+
+                                    بنك
+
+                                </span>
+
+                                {% elif sale.payment_method == "wallet" %}
+
+                                <span class="payment-badge payment-wallet">
+
+                                    <i class="fa-solid fa-wallet"></i>
+
+                                    محفظة
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="payment-badge">
+
+                                    {{ sale.payment_method }}
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Total -->
+
+                            <td>
+
+                                <span class="sale-total">
+
+                                    {{ "%.2f"|format(sale.total|float) }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- Profit -->
+
+                            <td>
+
+                                <span class="sale-profit">
+
+                                    {{ "%.2f"|format(sale.profit|float) }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- Status -->
+
+                            <td>
+
+                                {% if sale.status == "completed" %}
+
+                                <span class="status-badge status-completed">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    مكتملة
+
+                                </span>
+
+                                {% elif sale.status == "pending" %}
+
+                                <span class="status-badge status-pending">
+
+                                    قيد الانتظار
+
+                                </span>
+
+                                {% elif sale.status == "cancelled" %}
+
+                                <span class="status-badge status-cancelled">
+
+                                    ملغاة
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="status-badge">
+
+                                    {{ sale.status }}
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- Date -->
+
+                            <td>
+
+                                {% if sale.created_at %}
+
+                                    {{ sale.created_at.strftime("%Y-%m-%d %H:%M") }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-check"></i>
+
+                </div>
+
+                <strong>
+                    لا توجد مبيعات حتى الآن
+                </strong>
+
+                <span>
+                    عندما يتم تنفيذ أول عملية بيع ستظهر هنا.
+                </span>
+
+            </div>
+
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             LOW STOCK
+        ================================================== -->
+
+        <div class="panel">
+
+            <div class="panel-header">
+
+                <div class="panel-heading">
+
+                    <div class="panel-heading-icon">
+
+                        <i class="fa-solid fa-box-open"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2 class="panel-title">
+                            تنبيهات المخزون
+                        </h2>
+
+                        <p class="panel-subtitle">
+                            المنتجات التي تحتاج إلى إعادة تخزين
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                {% if current_user and current_user.role in ["admin", "stock"] %}
+
+                <a
+                    href="{{ url_for('inventory') }}"
+                    class="panel-link"
+                >
+
+                    إدارة المخزون
+
+                    <i class="fa-solid fa-arrow-left"></i>
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+
+            {% if low_stock_products %}
+
+            <div class="low-stock-list">
+
+                {% for product in low_stock_products %}
+
+                <div class="stock-item">
+
+                    <div class="stock-product">
+
+                        <div class="stock-product-name">
+
+                            {{ product.name }}
+
+                        </div>
+
+                        <div class="stock-product-barcode">
+
+                            {{ product.barcode }}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="stock-number">
+
+                        {{ product.stock }}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fa-solid fa-shield-check"></i>
+
+                </div>
+
+                <strong>
+                    المخزون بحالة ممتازة
+                </strong>
+
+                <span>
+                    لا توجد منتجات وصلت إلى حد المخزون المنخفض.
+                </span>
+
+            </div>
+
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         QUICK ACTIONS
+    ====================================================== -->
+
+    <section class="panel quick-actions">
+
+        <div class="panel-header">
+
+            <div class="panel-heading">
+
+                <div class="panel-heading-icon">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                </div>
+
+                <div>
+
+                    <h2 class="panel-title">
+                        الوصول السريع
+                    </h2>
+
+                    <p class="panel-subtitle">
+                        أهم العمليات التي تحتاجها يومياً
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-actions-grid">
+
+
+            <!-- POS -->
+
+            {% if current_user and current_user.role in ["admin", "cashier"] %}
+
+            <a
+                href="{{ url_for('pos') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                </div>
+
+                <div class="quick-action-text">
+
+                    <strong>
+                        نقطة البيع
+                    </strong>
+
+                    <span>
+                        إنشاء فاتورة جديدة
+                    </span>
+
+                </div>
+
+            </a>
+
+            {% endif %}
+
+
+            <!-- PRODUCTS -->
+
+            {% if current_user and current_user.role in ["admin", "stock"] %}
+
+            <a
+                href="{{ url_for('products') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+
+                    <i class="fa-solid fa-box"></i>
+
+                </div>
+
+                <div class="quick-action-text">
+
+                    <strong>
+                        المنتجات
+                    </strong>
+
+                    <span>
+                        إدارة المنتجات والأسعار
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- INVENTORY -->
+
+            <a
+                href="{{ url_for('inventory') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+
+                    <i class="fa-solid fa-warehouse"></i>
+
+                </div>
+
+                <div class="quick-action-text">
+
+                    <strong>
+                        المخزون
+                    </strong>
+
+                    <span>
+                        متابعة الكميات والحركات
+                    </span>
+
+                </div>
+
+            </a>
+
+            {% endif %}
+
+
+            <!-- SALES -->
+
+            <a
+                href="{{ url_for('sales') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+
+                </div>
+
+                <div class="quick-action-text">
+
+                    <strong>
+                        المبيعات
+                    </strong>
+
+                    <span>
+                        مراجعة الفواتير والعمليات
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- ADMIN -->
+
+            {% if current_user and current_user.role == "admin" %}
+
+
+            <!-- REPORTS -->
+
+            <a
+                href="{{ url_for('reports') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+
+                    <i class="fa-solid fa-chart-pie"></i>
+
+                </div>
+
+                <div class="quick-action-text">
+
+                    <strong>
+                        التقارير
+                    </strong>
+
+                    <span>
+                        الأرباح والإيرادات والإحصائيات
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- USERS -->
+
+            <a
+                href="{{ url_for('users') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+                <div class="quick-action-text">
+
+                    <strong>
+                        الموظفون
+                    </strong>
+
+                    <span>
+                        إدارة المستخدمين والصلاحيات
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- AUDIT LOG -->
+
+            <a
+                href="{{ url_for('audit_log') }}"
+                class="quick-action"
+            >
+
+                <div class="quick-action-icon">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+                <div class="quick-action-text">
+
+                    <strong>
+                        سجل العمليات
+                    </strong>
+
+                    <span>
+                        مراقبة نشاط النظام
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER STATUS
+    ====================================================== -->
+
+    <div class="dashboard-footer">
+
+        <div class="dashboard-footer-status">
+
+            <span class="dashboard-footer-dot"></span>
+
+            النظام جاهز للعمل
+
+        </div>
+
+
+        <span>
+            SMART POS ERP
+        </span>
+
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    /* =====================================================
+       DASHBOARD INITIALIZATION
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const page =
+                document.getElementById(
+                    "dashboardPage"
+                );
+
+
+            if (!page) {
+                return;
+            }
+
+
+            /*
+             * Reveal dashboard smoothly.
+             */
+
+            requestAnimationFrame(
+                function () {
+
+                    page.classList.remove(
+                        "dashboard-loading"
+                    );
+
+                }
+            );
+
+
+            /*
+             * Stagger animation.
+             */
+
+            const animatedItems =
+                page.querySelectorAll(
+                    ".stat-card, .panel, .quick-action"
+                );
+
+
+            animatedItems.forEach(
+                function (item, index) {
+
+                    item.style.transitionDelay =
+                        Math.min(
+                            index * 35,
+                            300
+                        ) + "ms";
+
+                }
+            );
+
+
+            /*
+             * Protect forms from accidental
+             * multiple submissions.
+             */
+
+            document
+                .querySelectorAll("form")
+                .forEach(
+                    function (form) {
+
+                        form.addEventListener(
+                            "submit",
+                            function () {
+
+                                const buttons =
+                                    form.querySelectorAll(
+                                        'button[type="submit"]'
+                                    );
+
+
+                                buttons.forEach(
+                                    function (button) {
+
+                                        if (
+                                            button.disabled
+                                        ) {
+                                            return;
+                                        }
+
+
+                                        button.dataset
+                                            .originalText =
+                                                button.innerHTML;
+
+
+                                        button.disabled =
+                                            true;
+
+
+                                        button.innerHTML =
+                                            '<i class="fa-solid fa-spinner fa-spin"></i> جاري التنفيذ...';
+
+                                    }
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            /*
+             * Prevent broken navigation
+             * caused by empty href values.
+             */
+
+            page
+                .querySelectorAll(
+                    'a[href=""]'
+                )
+                .forEach(
+                    function (link) {
+
+                        link.addEventListener(
+                            "click",
+                            function (event) {
+
+                                event.preventDefault();
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+})();
+
+</script>
+
+
+<!-- Existing application scripts -->
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+{% endblock %}
